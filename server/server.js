@@ -41,18 +41,41 @@ app.get("/welcome", (req, res) => {
 });
 
 app.post("/registration", (req, res) => {
-    console.log("req.body: ", req.body);
+    //console.log("req: ", req.body);
+    const firstName = req.body.first;
+    const lastName = req.body.last;
+    const email = req.body.email;
+    const password = req.body.password;
 
-    bc.hash(req.body.password)
-        .then((hashedPw) => {if (
-            firstName == "" ||
-            lastName == "" ||
-            email == "" ||
-            password == ""
-        ) {
-            throw Error;
-        } else db.})
-        .catch();
+    bc.hash(password)
+        .then((hashedPw) => {
+            if (
+                firstName == "" ||
+                lastName == "" ||
+                email == "" ||
+                password == ""
+            ) {
+                throw Error;
+            } else {
+                return db
+                    .userRegistration(firstName, lastName, email, hashedPw)
+                    .then((results) => {
+                        req.session.userId = results.rows[0].id;
+                        res.redirect("/");
+                    })
+                    .catch((err) => {
+                        console.log("ERR in db.userRegistration: ", err);
+                        res.redirect("/");
+                    });
+            }
+        })
+        .catch((err) => {
+            console.log("ERR in hash:", err);
+            res.render("registration", {
+                layout: "main",
+                err,
+            });
+        });
 });
 
 app.get("*", function (req, res) {

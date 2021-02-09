@@ -25,7 +25,7 @@ export default class Registration extends React.Component {
     handleClick() {
         // remaining tasks: make the red underlines go away!
         axios
-            .post("/registration", dataToSendToServer)
+            .post("/registration", this.state)
             .then((resp) => {
                 console.log("resp from server: ", resp);
                 if (error) {

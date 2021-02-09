@@ -11,10 +11,11 @@ let elem;
 if (location.pathname === "/welcome") {
     elem = <Welcome />;
 } else {
-    elem = <p>I'm not the welcome route</p>;
+    elem = <p>I am not the welcome route</p>;
 }
 
 ReactDOM.render(<Welcome />, document.querySelector("main"));
 
 //npm start
 //npm run dev:client
+// sudo service postgresql start
