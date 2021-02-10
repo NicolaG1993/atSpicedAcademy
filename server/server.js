@@ -1,5 +1,7 @@
 const express = require("express");
 const app = express();
+const compression = require("compression");
+const path = require("path");
 
 const cookieSession = require("cookie-session");
 let cookie_sec;
@@ -8,9 +10,6 @@ if (process.env.secretCookie) {
 } else {
     cookie_sec = require("./secrets.json").secretCookie;
 }
-
-const compression = require("compression");
-const path = require("path");
 
 const db = require("./db");
 const bc = require("./bc");
@@ -25,9 +24,11 @@ app.use(
         maxAge: 1000 * 60 * 60 * 24 * 14,
     })
 );
+app.use(express.urlencoded({ extended: false }));
+app.use(express.json());
 
 app.get("/welcome", (req, res) => {
-    req.session.userId = 1; //solo per test, eliminare
+    //req.session.userId = 1; //solo per test, eliminare
     // if you don't have the cookie-session middelware this code will NOT work!
     if (req.session.userId) {
         // if the user is logged in... redirect away from /welcome
@@ -49,32 +50,20 @@ app.post("/registration", (req, res) => {
 
     bc.hash(password)
         .then((hashedPw) => {
-            if (
-                firstName == "" ||
-                lastName == "" ||
-                email == "" ||
-                password == ""
-            ) {
-                throw Error;
-            } else {
-                return db
-                    .userRegistration(firstName, lastName, email, hashedPw)
-                    .then((results) => {
-                        req.session.userId = results.rows[0].id;
-                        res.redirect("/");
-                    })
-                    .catch((err) => {
-                        console.log("ERR in db.userRegistration: ", err);
-                        res.redirect("/");
-                    });
-            }
+            return db
+                .userRegistration(firstName, lastName, email, hashedPw)
+                .then((results) => {
+                    console.log("db.userRegistration had no issues!");
+                    req.session.userId = results.rows[0].id;
+                    res.json(results);
+                })
+                .catch((err) => {
+                    console.log("ERR in db.userRegistration: ", err);
+                    res.json({ error: true });
+                });
         })
         .catch((err) => {
             console.log("ERR in hash:", err);
-            res.render("registration", {
-                layout: "main",
-                err,
-            });
         });
 });
 

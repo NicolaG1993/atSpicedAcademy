@@ -28,7 +28,12 @@ export default class Registration extends React.Component {
             .post("/registration", this.state)
             .then((resp) => {
                 console.log("resp from server: ", resp);
-                if (error) {
+                if (
+                    this.state.first == "" ||
+                    this.state.last == "" ||
+                    this.state.email == "" ||
+                    this.state.password == ""
+                ) {
                     this.setState({
                         error: true,
                     });
@@ -38,7 +43,7 @@ export default class Registration extends React.Component {
             })
             .catch((err) => {
                 console.log("err in registration: ", err);
-                this.setState({
+                return this.setState({
                     error: true,
                 });
                 // render an error message

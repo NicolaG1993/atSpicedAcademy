@@ -14,7 +14,7 @@ if (location.pathname === "/welcome") {
     elem = <p>I am not the welcome route</p>;
 }
 
-ReactDOM.render(<Welcome />, document.querySelector("main"));
+ReactDOM.render(elem, document.querySelector("main"));
 
 //npm start
 //npm run dev:client
