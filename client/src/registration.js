@@ -2,7 +2,7 @@
 // class component have state!
 // (class components also have lifecycle methods (like componentDidMount))
 import React from "react";
-import axios from "axios";
+import axios from "./axios"; //we import axios from our js file (pt2), not from the module (axios.js has it already)
 
 export default class Registration extends React.Component {
     constructor() {

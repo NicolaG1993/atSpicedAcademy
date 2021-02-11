@@ -13,6 +13,7 @@ if (process.env.secretCookie) {
 
 const db = require("./db");
 const bc = require("./bc");
+const csurf = require("csurf");
 
 app.use(compression());
 
@@ -24,6 +25,14 @@ app.use(
         maxAge: 1000 * 60 * 60 * 24 * 14,
     })
 );
+
+app.use(csurf());
+
+app.use(function (req, res, next) {
+    res.cookie("mytoken", req.csrfToken());
+    next();
+});
+
 app.use(express.urlencoded({ extended: false }));
 app.use(express.json());
 

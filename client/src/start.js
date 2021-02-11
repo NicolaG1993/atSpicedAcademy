@@ -1,5 +1,6 @@
 import ReactDOM from "react-dom";
 import Welcome from "./welcome";
+import Logo from "./logo";
 //render my function in my DOM?
 // ReactDOM.render(<HelloWorld />, document.querySelector("main"));
 
@@ -11,7 +12,7 @@ let elem;
 if (location.pathname === "/welcome") {
     elem = <Welcome />;
 } else {
-    elem = <p>I am not the welcome route</p>;
+    elem = <Logo />;
 }
 
 ReactDOM.render(elem, document.querySelector("main"));
