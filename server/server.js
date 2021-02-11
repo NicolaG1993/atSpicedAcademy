@@ -76,6 +76,34 @@ app.post("/registration", (req, res) => {
         });
 });
 
+app.post("/login", (req, res) => {
+    const email = req.body.email;
+    const password = req.body.password;
+    //finire
+    db.userLogIn(email)
+        .then((results) => {
+            const hashFromDB = results.rows[0].password;
+            bc.compare(password, hashFromDB)
+                .then((match) => {
+                    if (match) {
+                        req.session.userId = results.rows[0].id;
+                        res.json(results);
+                    } else {
+                        console.log("ERR in bc.compare, infos not correct!!!");
+                        res.json({ error: true });
+                    }
+                })
+                .catch((err) => {
+                    console.log("ERR in bc.compare: ", err);
+                    res.json({ error: true });
+                });
+        })
+        .catch((err) => {
+            console.log("ERR in db.userLogin: ", err);
+            res.json({ error: true });
+        });
+});
+
 app.get("*", function (req, res) {
     if (!req.session.userId) {
         // if the user is not logged in, redirect to /welcome

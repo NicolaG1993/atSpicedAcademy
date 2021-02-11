@@ -3,6 +3,7 @@
 // (class components also have lifecycle methods (like componentDidMount))
 import React from "react";
 import axios from "./axios"; //we import axios from our js file (pt2), not from the module (axios.js has it already)
+import { Link } from "react-router-dom";
 
 export default class Registration extends React.Component {
     constructor() {
@@ -78,6 +79,7 @@ export default class Registration extends React.Component {
             <div>
                 {this.state.error && <p>Something broke :(</p>}
                 <h1>Registration</h1>
+                <Link to="/login">Click here to Log in!</Link>
                 {/* strategy #2 for binding: arrow functions! */}
                 <input
                     onChange={(e) => this.handleChange(e)}

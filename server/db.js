@@ -10,3 +10,9 @@ module.exports.userRegistration = (firstName, lastName, email, hashedPw) => {
     const keys = [firstName, lastName, email, hashedPw];
     return db.query(myQuery, keys);
 };
+
+module.exports.userLogIn = (email) => {
+    const myQuery = `SELECT * FROM users WHERE email = ($1)`;
+    const key = [email];
+    return db.query(myQuery, key);
+};
