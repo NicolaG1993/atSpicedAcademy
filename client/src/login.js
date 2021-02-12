@@ -50,6 +50,7 @@ export default class Login extends React.Component {
                 {this.state.error && <p>Something broke :(</p>}
                 <h1>Login</h1>
                 <Link to="/">Create an account!</Link>
+                <Link to="/reset">Click here if you forgot your password!</Link>
 
                 <input
                     onChange={(e) => this.handleChange(e)}

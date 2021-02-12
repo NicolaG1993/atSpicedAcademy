@@ -13,7 +13,9 @@ if (process.env.secretCookie) {
 
 const db = require("./db");
 const bc = require("./bc");
+const ses = require("./ses");
 const csurf = require("csurf");
+const cryptoRandomString = require("crypto-random-string");
 
 app.use(compression());
 
@@ -28,7 +30,7 @@ app.use(
 
 app.use(csurf());
 
-app.use(function (req, res, next) {
+app.use((req, res, next) => {
     res.cookie("mytoken", req.csrfToken());
     next();
 });
@@ -79,7 +81,6 @@ app.post("/registration", (req, res) => {
 app.post("/login", (req, res) => {
     const email = req.body.email;
     const password = req.body.password;
-    //finire
     db.userLogIn(email)
         .then((results) => {
             const hashFromDB = results.rows[0].password;
@@ -104,7 +105,76 @@ app.post("/login", (req, res) => {
         });
 });
 
-app.get("*", function (req, res) {
+app.post("/password/reset/start", (req, res) => {
+    const email = req.body.email;
+
+    db.userLogIn(email)
+        .then((results) => {
+            console.log("results: ", results.rows[0].email);
+            if (results.rows[0].email) {
+                const code = cryptoRandomString({
+                    length: 6,
+                });
+                db.storeCode(email, code)
+                    .then(
+                        ses
+                            .sendEmail(
+                                email,
+                                code,
+                                "Here is your reset password code"
+                            )
+                            .then(res.json({ codeSended: true }))
+                            .catch((err) => {
+                                console.log("ERR in ses.sendEmail: ", err);
+                                res.json({ error: true });
+                            })
+                    )
+                    .catch((err) => {
+                        console.log("ERR in db.storeCode: ", err);
+                        res.json({ error: true });
+                        //questo errore non torna come render
+                    });
+            } else {
+                res.json({ error: true });
+            }
+        })
+        .catch((err) => {
+            console.log("ERR in db.userLogIn (reset post req): ", err);
+            res.json({ error: true });
+        });
+});
+
+app.post("/password/reset/verify", (req, res) => {
+    const password = req.body.password;
+    const code = req.body.code;
+
+    db.checkCode(code)
+        .then((results) => {
+            console.log("results: ", results.rows);
+            const email = results.rows[0].email;
+            bc.hash(password)
+                .then((hashedPw) => {
+                    db.updatePassword(email, hashedPw)
+                        .then(
+                            //capire come passare email da post precedente (per update psw) forse con results.rows
+                            res.json({ pswUpdated: true })
+                        )
+                        .catch((err) => {
+                            console.log("ERR in db.updatePassword: ", err);
+                            res.json({ error: true });
+                        });
+                })
+                .catch((err) => {
+                    console.log("ERR in hash:", err);
+                });
+        })
+        .catch((err) => {
+            console.log("ERR in db.checkCode: ", err);
+            res.json({ error: true });
+        });
+});
+
+app.get("*", (req, res) => {
     if (!req.session.userId) {
         // if the user is not logged in, redirect to /welcome
         res.redirect("/welcome");
@@ -115,6 +185,18 @@ app.get("*", function (req, res) {
     }
 });
 
-app.listen(process.env.PORT || 3001, function () {
+app.listen(process.env.PORT || 3001, () => {
     console.log("I'm listening.");
 });
+
+/*
+BUG E STEPS NON COMPLETATI:
+    1) Ritornare vari errori per auth
+    1.a)se email é gia in db non dare cookie in registration e non entrare nel sito
+    1.b)se loggo con dati sbagliati devo avere un messaggio, invece vado a registration
+    1.c)se do email non esistente per reset-password voglio un messaggio che dice che non esiste
+    1.d) vari messaggi anche per registration
+    2) Potrei cambiare la db.userLogin con db.checkUser (avrebbe piu senso visto che la uso anche in reset psw)
+    3) Capire come funzionano sti url.. non mi sono chiari e non vorrei che cambiassero in modo cosí strano
+
+*/

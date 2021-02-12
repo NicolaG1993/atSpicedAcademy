@@ -44,7 +44,7 @@ export default class Registration extends React.Component {
             })
             .catch((err) => {
                 console.log("err in registration: ", err);
-                return this.setState({
+                this.setState({
                     error: true,
                 });
                 // render an error message
