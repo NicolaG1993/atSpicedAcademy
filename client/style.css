@@ -2,3 +2,30 @@ body {
     background-color: ghostwhite;
     color: green;
 }
+
+.profile-pic > img {
+    width: 50px;
+    border-radius: 25px;
+    cursor: pointer;
+}
+
+/* FRAMES */
+.red-frame {
+    border: 2px solid red;
+}
+
+.purple-frame {
+    border: 2px solid purple;
+}
+
+.green-frame {
+    border: 2px solid green;
+}
+
+.blue-frame {
+    border: 2px solid blue;
+}
+
+.turquoise-frame {
+    border: 2px solid turquoise;
+}

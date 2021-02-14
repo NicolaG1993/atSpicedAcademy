@@ -6,12 +6,12 @@ const db = spicedPg(
 
 // USER REGISTRATION & LOGIN
 module.exports.userRegistration = (firstName, lastName, email, hashedPw) => {
-    const myQuery = `INSERT INTO users ("First Name", "Last Name", email, password) VALUES ($1, $2, $3, $4) RETURNING id`;
+    const myQuery = `INSERT INTO users (first, last, email, password) VALUES ($1, $2, $3, $4) RETURNING id`;
     const keys = [firstName, lastName, email, hashedPw];
     return db.query(myQuery, keys);
 };
 
-module.exports.userLogIn = (email) => {
+module.exports.checkUser = (email) => {
     const myQuery = `SELECT * FROM users WHERE email = $1`;
     const key = [email];
     return db.query(myQuery, key);
@@ -35,4 +35,17 @@ module.exports.updatePassword = (email, password) => {
     const myQuery = `UPDATE users SET password = $2 WHERE email = $1`;
     const keys = [email, password];
     return db.query(myQuery, keys);
+};
+
+// PROFILE
+module.exports.getUser = (id) => {
+    const myQuery = `SELECT * FROM users WHERE id = $1`;
+    const key = [id];
+    return db.query(myQuery, key);
+};
+
+module.exports.uploadProfileImage = (url, id) => {
+    const q = `UPDATE users SET profile_pic_url = $1 WHERE id = $2 RETURNING *`; //senza returnin non vedo l'immagine appena la carico, ma solo se ricarico la pagin
+    const keys = [url, id];
+    return db.query(q, keys);
 };

@@ -1,30 +1,50 @@
 import { Component } from "react";
+import axios from "./axios";
 
 export class Uploader extends Component {
     constructor(props) {
         super(props);
         this.state = {
+            error: false,
             file: null,
         };
-        this.submit = this.submit.bind(this);
+        this.submit = this.submit.bind(this); //?
     }
 
-    handleChange() {}
+    componentDidMount() {
+        console.log("Uploader component did mount");
+    }
 
-    submit() {
-        // const formData = new FormData();
-        // formData.append("profilePic", this.state)
-        // Axios request
+    handleChange(e) {
+        console.log("e.target: ", e.target);
+        //what the user entered
+        this.setState({ file: e.target.files[0] });
+    }
 
-        //TODO: Update the state of App with the new ProfilePic once available
-        this.props.updateProfilePic(profilePicUrl);
+    async submit() {
+        const formData = new FormData(); //?
+        formData.append("file", this.state.file);
+
+        try {
+            const { data } = await axios.post("/profile_pic");
+            console.log("data-->Profile Pic Uploader: ", data);
+
+            //TODO: Update the state of App with the new ProfilePic once available
+            this.props.setProfilePicUrl(data.profile_pic_url);
+        } catch (err) {
+            console.log("err in Uploader-->submit: ", err);
+            this.setState({
+                error: true,
+            });
+        }
     }
 
     render() {
         return (
             <div className={"uploader"}>
-                <input type="file" />
+                <input onChange={(e) => this.handleChange(e)} type="file" />
                 <button onClick={this.submit}>Upload</button>
+                {this.state.error && <p>Something broke :(</p>}
             </div>
         );
     }

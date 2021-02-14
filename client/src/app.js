@@ -1,30 +1,75 @@
-import { Logo } from "./logo.js";
+import axios from "./axios";
+import { Logo } from "./logo";
 import { Component } from "react";
-import { ProfilePic } from "./profile-pic.js";
-import { Uploader } from "./uploader.js";
+import { ProfilePic } from "./profile-pic";
+import { Uploader } from "./uploader";
 
 export class App extends Component {
     constructor(props) {
         super(props);
 
         // Initialize App's state
-        this.state = { uploaderVisible: false };
+        this.state = {
+            uploaderVisible: false,
+            first: "",
+            last: "",
+            profilePicUrl: "",
+        };
 
         // TODO: Bind methods if needed
+        this.toggleUploader = this.toggleUploader.bind(this); //devo farlo se non esporto con default, in quel caso dovrei importare Logo invece di { LOGO }, ad es.
+        this.setProfilePicUrl = this.setProfilePicUrl.bind(this);
     }
 
-    componentDidMount() {
+    async componentDidMount() {
+        console.log("App component did mount");
+
         // Special React Lifecycle Method
         // TODO: Make an axios request to fetch the user's data when the component mounts
         // TODO: update the state when the data is retrieved
+        try {
+            const { data } = await axios.get("/user");
+            console.log("data: ", data);
+
+            this.setState({
+                id: data.id,
+                first: data.first,
+                last: data.last,
+                profilePicUrl: data.profile_pic_url,
+            });
+        } catch (err) {
+            console.log("err in app-->componentDidMount: ", err);
+        }
+
+        // axios.get("/something", this.state).then().catch((err) => {
+        //         console.log("err in app-->componentDidMount: ", err);
+        //         this.setState({
+        //             error: true,
+        //         });
     }
 
     toggleUploader() {
+        console.log("toggleUploader activated");
         // TODO: Toggles the "uploaderVisible" state
+        if (this.state.uploaderVisible) {
+            this.setState({
+                uploaderVisible: false,
+            });
+        } else {
+            this.setState({
+                uploaderVisible: true,
+            });
+        }
     }
-    setProfilePicUrl(profilePicUrl) {
+
+    setProfilePicUrl(profilePic) {
+        console.log("setProfilePicUrl activated");
         // TODO: Updates the "profilePicUrl" in the state
         // TODO: Hides the uploader
+        this.setState({
+            profilePicUrl: profilePic,
+            uploaderVisible: false,
+        });
     }
 
     render() {
@@ -34,7 +79,7 @@ export class App extends Component {
                 <ProfilePic
                     // Passing down props:
                     firstName={this.state.first}
-                    lastName={this.state.lastName}
+                    lastName={this.state.last}
                     profilePicUrl={this.state.profilePicUrl}
                     // Passing down methods as standard functions (binding needed):
                     toggleUploader={this.toggleUploader}

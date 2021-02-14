@@ -1,11 +1,12 @@
 export function ProfilePic(props) {
-    console.log(props);
+    console.log("props in profile-pic.js: ", props);
 
     return (
         <div className="profile-pic">
             <img
-                src={props.profilePicUrl || "default.png"}
-                alt={`${props.firstName}`}
+                onClick={props.toggleUploader}
+                src={props.profilePicUrl || "default.jpg"}
+                alt={`${props.firstName} ${props.lastName}`}
             />
         </div>
     );

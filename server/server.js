@@ -17,6 +17,9 @@ const ses = require("./ses");
 const csurf = require("csurf");
 const cryptoRandomString = require("crypto-random-string");
 
+const { uploader } = require("./upload");
+const s3 = require("./s3");
+
 app.use(compression());
 
 app.use(express.static(path.join(__dirname, "..", "client", "public")));
@@ -39,11 +42,10 @@ app.use(express.urlencoded({ extended: false }));
 app.use(express.json());
 
 app.get("/welcome", (req, res) => {
-    //req.session.userId = 1; //solo per test, eliminare
     // if you don't have the cookie-session middelware this code will NOT work!
     if (req.session.userId) {
         // if the user is logged in... redirect away from /welcome
-        res.redirect("/");
+        res.redirect("/"); //app?
     } else {
         // user is not logged in... don't redirect!
         // what happens after sendfile, after we send our HTML back as a response,
@@ -52,12 +54,13 @@ app.get("/welcome", (req, res) => {
     }
 });
 
-app.post("/registration", (req, res) => {
+app.post("/registration", async (req, res) => {
     //console.log("req: ", req.body);
     const firstName = req.body.first;
     const lastName = req.body.last;
     const email = req.body.email;
     const password = req.body.password;
+    // const { first, last, email, password } = req.body;
 
     bc.hash(password)
         .then((hashedPw) => {
@@ -78,10 +81,34 @@ app.post("/registration", (req, res) => {
         });
 });
 
+// app.post("/registration", async (req, res) => {
+//     const { first, last, email, password } = req.body;
+
+//     // you can only uses await on functions that return a promise!!!
+
+//     try {
+//         const hashedPw = await bc.hash(password);
+//         const results = await db.userRegistration(first, last, email, hashedPw);
+//         req.session.userId = results.rows[0].id;
+//         res.json({ results });
+//     } catch (err) {
+//         console.log("err in POST /registration", err.message);
+//         console.log(err.code);
+//         if (err.message === 'relation "users" does not exist') {
+//             // send back an error specific response
+//             console.log('relation "users" does not exist');
+//         } else if (err.code == "54301") {
+//             // send back an error specific response
+//             console.log("err.code: 54301");
+//         }
+//         res.json({ error: true });
+//     }
+// });
+
 app.post("/login", (req, res) => {
     const email = req.body.email;
     const password = req.body.password;
-    db.userLogIn(email)
+    db.checkUser(email)
         .then((results) => {
             const hashFromDB = results.rows[0].password;
             bc.compare(password, hashFromDB)
@@ -100,7 +127,7 @@ app.post("/login", (req, res) => {
                 });
         })
         .catch((err) => {
-            console.log("ERR in db.userLogin: ", err);
+            console.log("ERR in db.checkUser: ", err);
             res.json({ error: true });
         });
 });
@@ -108,7 +135,7 @@ app.post("/login", (req, res) => {
 app.post("/password/reset/start", (req, res) => {
     const email = req.body.email;
 
-    db.userLogIn(email)
+    db.checkUser(email)
         .then((results) => {
             console.log("results: ", results.rows[0].email);
             if (results.rows[0].email) {
@@ -139,7 +166,7 @@ app.post("/password/reset/start", (req, res) => {
             }
         })
         .catch((err) => {
-            console.log("ERR in db.userLogIn (reset post req): ", err);
+            console.log("ERR in db.checkUser (reset post req): ", err);
             res.json({ error: true });
         });
 });
@@ -174,6 +201,49 @@ app.post("/password/reset/verify", (req, res) => {
         });
 });
 
+app.get("/user", async (req, res) => {
+    console.log("GET req to route /user");
+    //code here?
+
+    try {
+        const { rows } = await db.getUser(req.session.userId);
+        res.json(rows[0]);
+    } catch (err) {
+        console.log("ERR in db.getUser: ", err);
+        res.json({ error: true });
+    }
+});
+
+app.post(
+    "/profile_pic",
+    uploader.single("file"),
+    s3.upload,
+    async (req, res) => {
+        console.log("POST req to route /profile-pic");
+        //code here?
+        console.log("req.body: ", req.body);
+        console.log("req.file: ", req.file);
+
+        if (req.file) {
+            const url = `https://s3.amazonaws.com/spicedling/${req.file.filename}`;
+
+            try {
+                const { rows } = await db.uploadProfileImage(
+                    url,
+                    req.session.userId
+                );
+                res.json(rows[0]);
+            } catch (err) {
+                console.log("err with db.uploadProfileImage: ", err);
+                res.json({ error: true });
+            }
+        } else {
+            console.log("No file in uploader!");
+            res.json({ error: true });
+        }
+    }
+);
+
 app.get("*", (req, res) => {
     if (!req.session.userId) {
         // if the user is not logged in, redirect to /welcome
@@ -196,7 +266,8 @@ BUG E STEPS NON COMPLETATI:
     1.b)se loggo con dati sbagliati devo avere un messaggio, invece vado a registration
     1.c)se do email non esistente per reset-password voglio un messaggio che dice che non esiste
     1.d) vari messaggi anche per registration
-    2) Potrei cambiare la db.userLogin con db.checkUser (avrebbe piu senso visto che la uso anche in reset psw)
+    2) Potrei cambiare la db.checkUser con db.getUser (avrebbe piu senso visto che la uso anche in reset psw)
     3) Capire come funzionano sti url.. non mi sono chiari e non vorrei che cambiassero in modo cosí strano
-
+    4) Cosé binding method?
+    5) Cosé export default?
 */
