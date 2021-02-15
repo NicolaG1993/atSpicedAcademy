@@ -215,7 +215,7 @@ app.get("/user", async (req, res) => {
 });
 
 app.post(
-    "/profile_pic",
+    "/profile-pic",
     uploader.single("file"),
     s3.upload,
     async (req, res) => {

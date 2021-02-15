@@ -45,7 +45,7 @@ module.exports.getUser = (id) => {
 };
 
 module.exports.uploadProfileImage = (url, id) => {
-    const q = `UPDATE users SET profile_pic_url = $1 WHERE id = $2 RETURNING *`; //senza returnin non vedo l'immagine appena la carico, ma solo se ricarico la pagin
+    const q = `UPDATE users SET profile_pic_url = $1 WHERE id = $2 RETURNING profile_pic_url`; //senza returnin non vedo l'immagine appena la carico, ma solo se ricarico la pagin
     const keys = [url, id];
     return db.query(q, keys);
 };

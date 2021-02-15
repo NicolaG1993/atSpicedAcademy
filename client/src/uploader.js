@@ -27,7 +27,7 @@ export default class Uploader extends Component {
         formData.append("file", this.state.file);
 
         try {
-            const { data } = await axios.post("/profile_pic", formData);
+            const { data } = await axios.post("/profile-pic", formData);
             console.log("data-->Profile Pic Uploader: ", data);
 
             //TODO: Update the state of App with the new ProfilePic once available

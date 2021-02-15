@@ -62,12 +62,12 @@ export class App extends Component {
         }
     }
 
-    setProfilePicUrl(profilePic) {
+    setProfilePicUrl(profilePicUrl) {
         console.log("setProfilePicUrl activated");
         // TODO: Updates the "profilePicUrl" in the state
         // TODO: Hides the uploader
         this.setState({
-            profilePicUrl: profilePic,
+            profilePicUrl: profilePicUrl,
             uploaderVisible: false,
         });
     }
@@ -88,7 +88,9 @@ export class App extends Component {
                 {this.state.uploaderVisible && (
                     <Uploader
                         // Passing down methods with arrow function (no binding needed):
-                        setProfilePicUrl={() => this.setProfilePicUrl()}
+                        setProfilePicUrl={(profilePicUrl) =>
+                            this.setProfilePicUrl(profilePicUrl)
+                        }
                     />
                 )}
             </div>
