@@ -54,56 +54,57 @@ app.get("/welcome", (req, res) => {
     }
 });
 
-app.post("/registration", async (req, res) => {
-    //console.log("req: ", req.body);
-    const firstName = req.body.first;
-    const lastName = req.body.last;
-    const email = req.body.email;
-    const password = req.body.password;
-    // const { first, last, email, password } = req.body;
-
-    bc.hash(password)
-        .then((hashedPw) => {
-            return db
-                .userRegistration(firstName, lastName, email, hashedPw)
-                .then((results) => {
-                    console.log("db.userRegistration had no issues!");
-                    req.session.userId = results.rows[0].id;
-                    res.json(results);
-                })
-                .catch((err) => {
-                    console.log("ERR in db.userRegistration: ", err);
-                    res.json({ error: true });
-                });
-        })
-        .catch((err) => {
-            console.log("ERR in hash:", err);
-        });
-});
-
 // app.post("/registration", async (req, res) => {
-//     const { first, last, email, password } = req.body;
+//     //console.log("req: ", req.body);
+//     const firstName = req.body.first;
+//     const lastName = req.body.last;
+//     const email = req.body.email;
+//     const password = req.body.password;
+//     // const { first, last, email, password } = req.body;
 
-//     // you can only uses await on functions that return a promise!!!
-
-//     try {
-//         const hashedPw = await bc.hash(password);
-//         const results = await db.userRegistration(first, last, email, hashedPw);
-//         req.session.userId = results.rows[0].id;
-//         res.json({ results });
-//     } catch (err) {
-//         console.log("err in POST /registration", err.message);
-//         console.log(err.code);
-//         if (err.message === 'relation "users" does not exist') {
-//             // send back an error specific response
-//             console.log('relation "users" does not exist');
-//         } else if (err.code == "54301") {
-//             // send back an error specific response
-//             console.log("err.code: 54301");
-//         }
-//         res.json({ error: true });
-//     }
+//     bc.hash(password)
+//         .then((hashedPw) => {
+//             return db
+//                 .userRegistration(firstName, lastName, email, hashedPw)
+//                 .then((results) => {
+//                     console.log("db.userRegistration had no issues!");
+//                     req.session.userId = results.rows[0].id;
+//                     res.json(results);
+//                 })
+//                 .catch((err) => {
+//                     console.log("ERR in db.userRegistration: ", err);
+//                     res.json({ error: true });
+//                 });
+//         })
+//         .catch((err) => {
+//             console.log("ERR in hash:", err);
+//         });
 // });
+
+app.post("/registration", async (req, res) => {
+    const { first, last, email, password } = req.body;
+    // you can only uses await on functions that return a promise!!!
+    try {
+        const hashedPw = await bc.hash(password);
+        const results = await db.userRegistration(first, last, email, hashedPw);
+        req.session.userId = results.rows[0].id;
+        console.log("db.userRegistration had no issues!");
+        res.json({ results });
+    } catch (err) {
+        console.log("err in POST /registration", err.message);
+        console.log(err.code);
+        if (err.message === 'relation "users" does not exist') {
+            // send back an error specific response
+            console.log('relation "users" does not exist');
+            res.json({ error: true });
+        } else if (err.code == "54301") {
+            // send back an error specific response
+            console.log("err.code: 54301");
+            res.json({ error: true });
+        }
+        res.json({ error: true });
+    }
+});
 
 app.post("/login", (req, res) => {
     const email = req.body.email;

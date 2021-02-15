@@ -3,6 +3,7 @@ import { Logo } from "./logo";
 import { Component } from "react";
 import ProfilePic from "./profile-pic";
 import Uploader from "./uploader";
+import Profile from "./profile";
 
 export class App extends Component {
     constructor(props) {
@@ -14,6 +15,8 @@ export class App extends Component {
             first: "",
             last: "",
             profilePicUrl: "",
+            bio: "",
+            size: "",
         };
 
         // TODO: Bind methods if needed
@@ -73,26 +76,48 @@ export class App extends Component {
     }
 
     render() {
+        console.log("this.state in app: ", this.state);
+        if (!this.state.id) {
+            return (
+                //return null;
+                <div className="spinner-container">
+                    <div className="spinner"></div>
+                </div>
+            );
+        }
         return (
-            <div className={"app"}>
-                <Logo />
-                <ProfilePic
-                    // Passing down props:
-                    firstName={this.state.first}
-                    lastName={this.state.last}
-                    profilePicUrl={this.state.profilePicUrl}
-                    // Passing down methods as standard functions (binding needed):
-                    toggleUploader={this.toggleUploader}
-                />
-                {/*Conditionally render the Uploader: */}
-                {this.state.uploaderVisible && (
-                    <Uploader
-                        // Passing down methods with arrow function (no binding needed):
-                        setProfilePicUrl={(profilePicUrl) =>
-                            this.setProfilePicUrl(profilePicUrl)
-                        }
+            <div className={"app red-frame"}>
+                <div className={"header"}>
+                    <Logo />
+                    <ProfilePic
+                        // Passing down props:
+                        firstName={this.state.first}
+                        lastName={this.state.last}
+                        profilePicUrl={this.state.profilePicUrl}
+                        // Passing down methods as standard functions (binding needed):
+                        toggleUploader={this.toggleUploader}
+                        size="small"
                     />
-                )}
+                </div>
+
+                <div className={"main green-frame"}>
+                    <Profile
+                        // Passing down props:
+                        firstName={this.state.first}
+                        lastName={this.state.last}
+                        profilePicUrl={this.state.profilePicUrl}
+                        bio={this.state.bio}
+                    />
+                    {/*Conditionally render the Uploader: */}
+                    {this.state.uploaderVisible && (
+                        <Uploader
+                            // Passing down methods with arrow function (no binding needed):
+                            setProfilePicUrl={(profilePicUrl) =>
+                                this.setProfilePicUrl(profilePicUrl)
+                            }
+                        />
+                    )}
+                </div>
             </div>
         );
     }

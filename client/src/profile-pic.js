@@ -7,6 +7,7 @@ export default function ProfilePic(props) {
                 onClick={props.toggleUploader}
                 src={props.profilePicUrl || "default.jpg"}
                 alt={`${props.firstName} ${props.lastName}`}
+                className={`${props.size} blue-frame`}
             />
         </div>
     );
