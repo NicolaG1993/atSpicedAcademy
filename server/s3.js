@@ -14,6 +14,7 @@ const s3 = new aws.S3({
 });
 
 exports.upload = (req, res, next) => {
+    console.log("req.file in s3: ", req.file);
     if (!req.file) {
         return res.sendStatus(500);
     }

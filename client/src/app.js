@@ -1,8 +1,8 @@
 import axios from "./axios";
 import { Logo } from "./logo";
 import { Component } from "react";
-import { ProfilePic } from "./profile-pic";
-import { Uploader } from "./uploader";
+import ProfilePic from "./profile-pic";
+import Uploader from "./uploader";
 
 export class App extends Component {
     constructor(props) {

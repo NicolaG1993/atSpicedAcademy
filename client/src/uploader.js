@@ -1,7 +1,7 @@
 import { Component } from "react";
 import axios from "./axios";
 
-export class Uploader extends Component {
+export default class Uploader extends Component {
     constructor(props) {
         super(props);
         this.state = {
@@ -16,21 +16,22 @@ export class Uploader extends Component {
     }
 
     handleChange(e) {
-        console.log("e.target: ", e.target);
+        console.log("e.target: ", e.target.files[0]);
         //what the user entered
         this.setState({ file: e.target.files[0] });
     }
 
     async submit() {
+        console.log("submit was clicked");
         const formData = new FormData(); //?
         formData.append("file", this.state.file);
 
         try {
-            const { data } = await axios.post("/profile_pic");
+            const { data } = await axios.post("/profile_pic", formData);
             console.log("data-->Profile Pic Uploader: ", data);
 
             //TODO: Update the state of App with the new ProfilePic once available
-            this.props.setProfilePicUrl(data.profile_pic_url);
+            await this.props.setProfilePicUrl(data.profile_pic_url);
         } catch (err) {
             console.log("err in Uploader-->submit: ", err);
             this.setState({
@@ -42,8 +43,8 @@ export class Uploader extends Component {
     render() {
         return (
             <div className={"uploader"}>
-                <input onChange={(e) => this.handleChange(e)} type="file" />
-                <button onClick={this.submit}>Upload</button>
+                <input type="file" onChange={(e) => this.handleChange(e)} />
+                <button onClick={() => this.submit()}>Upload</button>
                 {this.state.error && <p>Something broke :(</p>}
             </div>
         );

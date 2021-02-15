@@ -261,6 +261,7 @@ app.listen(process.env.PORT || 3001, () => {
 
 /*
 BUG E STEPS NON COMPLETATI:
+    0) Client ci mette almeno 20sec per partire
     1) Ritornare vari errori per auth
     1.a)se email é gia in db non dare cookie in registration e non entrare nel sito
     1.b)se loggo con dati sbagliati devo avere un messaggio, invece vado a registration

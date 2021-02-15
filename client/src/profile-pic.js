@@ -1,4 +1,4 @@
-export function ProfilePic(props) {
+export default function ProfilePic(props) {
     console.log("props in profile-pic.js: ", props);
 
     return (
