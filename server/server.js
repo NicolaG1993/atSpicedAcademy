@@ -245,6 +245,27 @@ app.post(
     }
 );
 
+app.post("/update-bio", async (req, res) => {
+    console.log("POST req to route /update-bio");
+    console.log("req.body: ", req.body);
+
+    if (req.body.bio) {
+        try {
+            const { rows } = await db.updateBio(
+                req.body.bio,
+                req.session.userId
+            );
+            res.json(rows[0]);
+        } catch (err) {
+            console.log("err with db.updateBio: ", err);
+            res.json({ error: true });
+        }
+    } else {
+        console.log("No text in bio!");
+        res.json({ error: true });
+    }
+});
+
 app.get("*", (req, res) => {
     if (!req.session.userId) {
         // if the user is not logged in, redirect to /welcome

@@ -22,6 +22,7 @@ export class App extends Component {
         // TODO: Bind methods if needed
         this.toggleUploader = this.toggleUploader.bind(this); //devo farlo se non esporto con default, in quel caso dovrei importare Logo invece di { LOGO }, ad es.
         this.setProfilePicUrl = this.setProfilePicUrl.bind(this);
+        this.setBio = this.setBio.bind(this);
     }
 
     async componentDidMount() {
@@ -39,6 +40,7 @@ export class App extends Component {
                 first: data.first,
                 last: data.last,
                 profilePicUrl: data.profile_pic_url,
+                bio: data.bio,
             });
         } catch (err) {
             console.log("err in app-->componentDidMount: ", err);
@@ -75,15 +77,22 @@ export class App extends Component {
         });
     }
 
+    setBio(bioText) {
+        console.log("setBio activated");
+        this.setState({
+            bio: bioText,
+        });
+    }
+
     render() {
         console.log("this.state in app: ", this.state);
         if (!this.state.id) {
-            return (
-                //return null;
-                <div className="spinner-container">
-                    <div className="spinner"></div>
-                </div>
-            );
+            return null;
+            // return (
+            //     <div className="spinner-container">
+            //         <div className="spinner"></div>
+            //     </div>
+            // );
         }
         return (
             <div className={"app red-frame"}>
@@ -107,6 +116,7 @@ export class App extends Component {
                         lastName={this.state.last}
                         profilePicUrl={this.state.profilePicUrl}
                         bio={this.state.bio}
+                        setBio={this.setBio}
                     />
                     {/*Conditionally render the Uploader: */}
                     {this.state.uploaderVisible && (

@@ -1,30 +1,67 @@
 import React from "react";
-// import axios from "./axios";
+//un'altro modo per importare react component
+import axios from "./axios";
 
 export default class BioEditor extends React.Component {
-    constructor() {
-        super();
+    constructor(props) {
+        super(props);
         this.state = {
+            error: false,
             editingMode: false,
         };
+        this.updateBio = this.updateBio.bind(this);
+    }
+
+    handleChange(e) {
+        //what the user entered
+        console.log("e target name: ", e.target.name);
+        this.setState(
+            {
+                [e.target.name]: e.target.value,
+            },
+            () => console.log("this.state after setState: ", this.state)
+        );
+    }
+
+    async updateBio() {
+        console.log("submit was clicked");
+        try {
+            const { data } = await axios.post("/update-bio", this.state);
+            console.log("data-->Profile Bio Editor: ", data);
+            this.props.setBio(data.bio);
+            this.setState({ editingMode: false });
+        } catch (err) {
+            console.log("err in /update-bio-->submit bio: ", err);
+            this.setState({
+                error: true,
+            });
+        }
     }
 
     render() {
         console.log("this.props in BioEditor: ", this.props);
         if (this.state.editingMode) {
             return (
-                <div>
+                <div className="purple-frame">
                     <h1>EDIT MODE!!!</h1>
-                    <textarea defaultValue="This is a default bio"></textarea>
-                    <button>Save Bio</button>
+                    <textarea
+                        name="bio"
+                        defaultValue={this.props.bio}
+                        onChange={(e) => this.handleChange(e)}
+                    ></textarea>
+                    <button onClick={() => this.updateBio()}>Save Bio</button>
+                    {/* editing mode --> false */}
                 </div>
             );
         }
         return (
             <div className="purple-frame">
                 <h1>I am the Bio Editor!</h1>
-                <p>this will be the user bio we get from props</p>
-                <button>Click me!</button>
+                <p>{this.props.bio}</p>
+                <button onClick={() => this.setState({ editingMode: true })}>
+                    Click me!
+                </button>
+                {/* editing mode --> true */}
             </div>
         );
     }

@@ -49,3 +49,9 @@ module.exports.uploadProfileImage = (url, id) => {
     const keys = [url, id];
     return db.query(q, keys);
 };
+
+module.exports.updateBio = (bio, id) => {
+    const q = `UPDATE users SET bio = $1 WHERE id = $2 RETURNING bio`;
+    const keys = [bio, id];
+    return db.query(q, keys);
+};
