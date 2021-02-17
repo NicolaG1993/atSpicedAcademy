@@ -11,6 +11,12 @@ if (process.env.secretCookie) {
     cookie_sec = require("./secrets.json").secretCookie;
 }
 
+const {
+    requireLoggedInUser,
+    requireLoggedOutUser,
+    setToken,
+    dealWithCookieVulnerabilities,
+} = require("./middleware");
 const db = require("./db");
 const bc = require("./bc");
 const ses = require("./ses");
@@ -20,6 +26,7 @@ const cryptoRandomString = require("crypto-random-string");
 const { uploader } = require("./upload");
 const s3 = require("./s3");
 
+/////*****MIDDLEWARES*****/////
 app.use(compression());
 
 app.use(express.static(path.join(__dirname, "..", "client", "public")));
@@ -33,15 +40,14 @@ app.use(
 
 app.use(csurf());
 
-app.use((req, res, next) => {
-    res.cookie("mytoken", req.csrfToken());
-    next();
-});
+app.use(setToken); // in prova
+app.use(dealWithCookieVulnerabilities); // mi serve questo?
 
 app.use(express.urlencoded({ extended: false }));
 app.use(express.json());
 
-app.get("/welcome", (req, res) => {
+/////*****WELCOME*****/////
+app.get("/welcome", requireLoggedOutUser, (req, res) => {
     // if you don't have the cookie-session middelware this code will NOT work!
     if (req.session.userId) {
         // if the user is logged in... redirect away from /welcome
@@ -81,6 +87,7 @@ app.get("/welcome", (req, res) => {
 //         });
 // });
 
+/////*****AUTH*****/////
 app.post("/registration", async (req, res) => {
     const { first, last, email, password } = req.body;
     // you can only uses await on functions that return a promise!!!
@@ -133,6 +140,7 @@ app.post("/login", (req, res) => {
         });
 });
 
+/////*****RESET PSW*****/////
 app.post("/password/reset/start", (req, res) => {
     const email = req.body.email;
 
@@ -202,6 +210,7 @@ app.post("/password/reset/verify", (req, res) => {
         });
 });
 
+/////*****USER*****/////
 app.get("/user", async (req, res) => {
     console.log("GET req to route /user");
     //code here?
@@ -266,6 +275,7 @@ app.post("/update-bio", async (req, res) => {
     }
 });
 
+/////*****OTHER USER*****/////
 app.get("/api/other-profile/:id", async (req, res) => {
     //can also use "/user/:id.json" instead
     console.log("GET req to route /user/:id.json");
@@ -283,15 +293,16 @@ app.get("/api/other-profile/:id", async (req, res) => {
     }
 });
 
-app.get("*", (req, res) => {
-    if (!req.session.userId) {
-        // if the user is not logged in, redirect to /welcome
-        res.redirect("/welcome");
-    } else {
-        // if they are logged in, send over the HTML
-        // and once the client has the HTML, start.js will render the <p> tag onscreen
-        res.sendFile(path.join(__dirname, "..", "client", "index.html"));
-    }
+/////*****MORE*****/////
+app.get("/logout", requireLoggedInUser, (req, res) => {
+    req.session = null;
+    res.redirect("/welcome");
+});
+
+app.get("*", requireLoggedInUser, (req, res) => {
+    // if they are logged in, send over the HTML
+    // and once the client has the HTML, start.js will render the <p> tag onscreen
+    res.sendFile(path.join(__dirname, "..", "client", "index.html"));
 });
 
 app.listen(process.env.PORT || 3001, () => {
