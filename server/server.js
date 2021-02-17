@@ -266,6 +266,23 @@ app.post("/update-bio", async (req, res) => {
     }
 });
 
+app.get("/api/other-profile/:id", async (req, res) => {
+    //can also use "/user/:id.json" instead
+    console.log("GET req to route /user/:id.json");
+    try {
+        const { rows } = await db.getUser(req.params.id);
+        if (rows.length) {
+            res.json(rows[0]);
+        } else {
+            console.log("err with db.getUser (other user): no user found");
+            res.json({ error: true });
+        }
+    } catch (err) {
+        console.log("err with db.getUser (other user): ", err);
+        res.json({ error: true });
+    }
+});
+
 app.get("*", (req, res) => {
     if (!req.session.userId) {
         // if the user is not logged in, redirect to /welcome

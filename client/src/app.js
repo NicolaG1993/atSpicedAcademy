@@ -4,6 +4,8 @@ import { Component } from "react";
 import ProfilePic from "./profile-pic";
 import Uploader from "./uploader";
 import Profile from "./profile";
+import { BrowserRouter, Route } from "react-router-dom";
+import OtherProfile from "./other-profile";
 
 export class App extends Component {
     constructor(props) {
@@ -95,40 +97,62 @@ export class App extends Component {
             // );
         }
         return (
-            <div className={"app red-frame"}>
-                <div className={"header"}>
-                    <Logo />
-                    <ProfilePic
-                        // Passing down props:
-                        firstName={this.state.first}
-                        lastName={this.state.last}
-                        profilePicUrl={this.state.profilePicUrl}
-                        // Passing down methods as standard functions (binding needed):
-                        toggleUploader={this.toggleUploader}
-                        size="small"
-                    />
-                </div>
-
-                <div className={"main green-frame"}>
-                    <Profile
-                        // Passing down props:
-                        firstName={this.state.first}
-                        lastName={this.state.last}
-                        profilePicUrl={this.state.profilePicUrl}
-                        bio={this.state.bio}
-                        setBio={this.setBio}
-                    />
-                    {/*Conditionally render the Uploader: */}
-                    {this.state.uploaderVisible && (
-                        <Uploader
-                            // Passing down methods with arrow function (no binding needed):
-                            setProfilePicUrl={(profilePicUrl) =>
-                                this.setProfilePicUrl(profilePicUrl)
-                            }
+            <BrowserRouter>
+                <div className={"app red-frame"}>
+                    <div className={"header"}>
+                        <Logo />
+                        <ProfilePic
+                            // Passing down props:
+                            firstName={this.state.first}
+                            lastName={this.state.last}
+                            profilePicUrl={this.state.profilePicUrl}
+                            // Passing down methods as standard functions (binding needed):
+                            toggleUploader={this.toggleUploader}
+                            size="small"
                         />
-                    )}
+                    </div>
+
+                    <div className={"main green-frame"}>
+                        {this.state.error && <p>Something broke :(</p>}
+                        <Route
+                            exact
+                            path="/"
+                            render={() => (
+                                <Profile
+                                    // Passing down props:
+                                    firstName={this.state.first}
+                                    lastName={this.state.last}
+                                    profilePicUrl={this.state.profilePicUrl}
+                                    bio={this.state.bio}
+                                    setBio={this.setBio}
+                                />
+                            )}
+                        />
+
+                        <Route
+                            path="/user/:id"
+                            render={(props) => (
+                                <OtherProfile
+                                    key={props.match.url}
+                                    match={props.match}
+                                    history={props.history}
+                                    userId={this.state.id}
+                                />
+                            )}
+                        />
+
+                        {/*Conditionally render the Uploader: */}
+                        {this.state.uploaderVisible && (
+                            <Uploader
+                                // Passing down methods with arrow function (no binding needed):
+                                setProfilePicUrl={(profilePicUrl) =>
+                                    this.setProfilePicUrl(profilePicUrl)
+                                }
+                            />
+                        )}
+                    </div>
                 </div>
-            </div>
+            </BrowserRouter>
         );
     }
 }
