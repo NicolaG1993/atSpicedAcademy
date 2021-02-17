@@ -8,6 +8,7 @@ export default class BioEditor extends React.Component {
         this.state = {
             error: false,
             editingMode: false,
+            bio: props.bio || "",
         };
         this.updateBio = this.updateBio.bind(this);
     }

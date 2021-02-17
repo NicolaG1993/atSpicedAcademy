@@ -25,7 +25,7 @@ export default class OtherProfile extends Component {
 
             // If we are trying to view our own profile,
             // we should make sure to send the user back to the '/' route
-            if (this.props.match.params.id == data.userId) {
+            if (this.props.match.params.id == this.props.userId) {
                 return this.props.history.push("/");
             }
             this.setState({
@@ -58,7 +58,7 @@ export default class OtherProfile extends Component {
             <div className="otherProfile">
                 <h1>Other Profile Component</h1>
                 <img
-                    src={this.state.profilePicUrl}
+                    src={this.state.profilePicUrl || "/default.jpg"}
                     size="medium"
                     alt={`${this.state.first} ${this.state.last}`}
                 />

@@ -11,7 +11,7 @@ test("when no image from is passed, the default img is used as the src", () => {
     //     container.querySelector("img").src
     // );
     const img = container.querySelector("img");
-    expect(img.src.endsWith("/default.png")).toBe(true);
+    expect(img.src.endsWith("/default.jpg")).toBe(true);
 });
 
 // when an image prop from is passed, that prop becomes the src of the image
@@ -27,7 +27,7 @@ test("when an image prop from is passed, that prop becomes the src of the image"
 // first and last name become the alt tag of the image when passed as props
 
 test("first and last name become the alt tag of the image when passed as props", () => {
-    const { container } = render(<ProfilePic first="Pete" last="Anderson" />);
+    const { container } = render(<ProfilePic first="Nicola" last="Gaioni" />);
     const img = container.querySelector("img");
-    expect(img.alt).toBe("Pete Anderson");
+    expect(img.alt).toBe("Nicola Gaioin");
 });

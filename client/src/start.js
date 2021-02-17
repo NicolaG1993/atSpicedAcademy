@@ -18,7 +18,10 @@ if (location.pathname === "/welcome") {
 ReactDOM.render(elem, document.querySelector("main"));
 
 //npm start
+//npm run dev
 //npm run dev:server
 //npm run dev:client
 // sudo service postgresql start
 // killall node
+
+//npm run test filename ??

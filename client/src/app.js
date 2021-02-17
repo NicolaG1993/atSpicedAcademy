@@ -16,7 +16,7 @@ export class App extends Component {
             uploaderVisible: false,
             first: "",
             last: "",
-            profilePicUrl: "",
+            profilePicUrl: props.profile_pic_url || "",
             bio: "",
             size: "",
         };
