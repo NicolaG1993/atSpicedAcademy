@@ -55,3 +55,9 @@ module.exports.updateBio = (bio, id) => {
     const keys = [bio, id];
     return db.query(q, keys);
 };
+
+// FIND USERS
+module.exports.findRecentsUsers = () => {
+    const myQuery = `SELECT * FROM users ORDER BY id DESC LIMIT 3;`;
+    return db.query(myQuery);
+};

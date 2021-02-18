@@ -278,7 +278,7 @@ app.post("/update-bio", async (req, res) => {
 /////*****OTHER USER*****/////
 app.get("/api/other-profile/:id", async (req, res) => {
     //can also use "/user/:id.json" instead
-    console.log("GET req to route /user/:id.json");
+    console.log("GET req to route /api/other-profile/:id");
     try {
         const { rows } = await db.getUser(req.params.id);
         if (rows.length) {
@@ -287,6 +287,20 @@ app.get("/api/other-profile/:id", async (req, res) => {
             console.log("err with db.getUser (other user): no user found");
             res.json({ error: true });
         }
+    } catch (err) {
+        console.log("err with db.getUser (other user): ", err);
+        res.json({ error: true });
+    }
+});
+
+/////*****FIND USERS*****/////
+app.get("/users", async (req, res) => {
+    console.log("GET req to route /users");
+
+    try {
+        const { rows } = await db.findRecentsUsers();
+        console.log("rows: ", rows[0]);
+        res.json(rows[0]);
     } catch (err) {
         console.log("err with db.getUser (other user): ", err);
         res.json({ error: true });
