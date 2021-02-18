@@ -346,5 +346,5 @@ BUG E STEPS NON COMPLETATI:
     3) Capire come funzionano sti url.. non mi sono chiari e non vorrei che cambiassero in modo cosí strano
     4) Cosé binding method?
     5) Cosé export default?
-    6) default img non viene caricata in header fuori da route "/"
+    6) default img non viene caricata in header fuori da route "/" --> risolto
 */

@@ -19,9 +19,9 @@ export default function SearchUsers() {
                 setUsers(data);
                 if (!abort) {
                     console.log("!abort");
-                    const { data } = await axios.get(
-                        `/api/find-users/${users[0]}`
-                    );
+                    // const { data } = await axios.get(
+                    //     `/api/find-users/${users[0]}`
+                    // );
                     setUsers(data);
                 }
             } catch (err) {
