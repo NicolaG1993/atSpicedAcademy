@@ -4,7 +4,7 @@ import { Component } from "react";
 import ProfilePic from "./profile-pic";
 import Uploader from "./uploader";
 import Profile from "./profile";
-import { BrowserRouter, Route } from "react-router-dom";
+import { BrowserRouter, Route, Link } from "react-router-dom";
 import OtherProfile from "./other-profile";
 import { SearchUsers } from "./find-people";
 
@@ -111,6 +111,8 @@ export class App extends Component {
                             toggleUploader={this.toggleUploader}
                             size="small"
                         />
+                        <Link to={`/users`}>Search</Link>
+                        <Link to={`/logout`}>Logout</Link>
                     </div>
 
                     <div className={"main green-frame"}>
@@ -143,9 +145,15 @@ export class App extends Component {
                         />
 
                         <Route
+                            exact
                             path="/users"
-                            render={(props) => (
-                                <SearchUsers key={props.match.url} />
+                            render={() => (
+                                <SearchUsers
+                                    id={this.state.id}
+                                    firstName={this.state.first}
+                                    lastName={this.state.last}
+                                    profilePicUrl={this.state.profilePicUrl}
+                                />
                             )}
                         />
 

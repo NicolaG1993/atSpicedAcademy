@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import axios from "./axios";
+import { Link } from "react-router-dom";
 
 export function SearchUsers() {
     // "user" is our state property
@@ -7,16 +8,16 @@ export function SearchUsers() {
     const [user, setUser] = useState("");
     const [users, setUsers] = useState([]);
 
-    // const handleChange = (e) => {
-    // setUser(e.target.value);
-    // };
+    const handleChange = (e) => {
+        setUser(e.target.value);
+    };
 
     useEffect(() => {
         let abort = false;
 
         (async () => {
             try {
-                const { data } = await axios.get(`/api/users/${user}`);
+                const { data } = await axios.get(`/api/find-users/${user}`);
                 if (!abort) {
                     setUsers(data);
                 }
@@ -37,13 +38,29 @@ export function SearchUsers() {
                 name="user"
                 type="text"
                 placeholder="user to search"
-                onChange={(e) => setUser(e.target.value)}
-                // onChange={handleChange}
+                onChange={(e) => {
+                    setUser(e.target.value);
+                    handleChange();
+                }}
                 autoComplete="off"
             />
-            {users.map((elem, index) => {
-                return <p key={index}>{elem}</p>;
-            })}
+            <div>
+                {users.map((elem, index) => {
+                    return (
+                        <div key={index}>
+                            <Link to={`/user/${elem.id}`}>
+                                <img
+                                    src={elem.profile_pic_url}
+                                    alt={`${elem.first} ${elem.last}`}
+                                />
+                                <p>
+                                    {elem.first} {elem.last}
+                                </p>
+                            </Link>
+                        </div>
+                    );
+                })}
+            </div>
         </div>
     );
 }

@@ -294,16 +294,27 @@ app.get("/api/other-profile/:id", async (req, res) => {
 });
 
 /////*****FIND USERS*****/////
-app.get("/users", async (req, res) => {
-    console.log("GET req to route /users");
+app.get("/api/find-users/:name", async (req, res) => {
+    console.log("GET req to route /api/find-users/:name");
 
-    try {
-        const { rows } = await db.findRecentsUsers();
-        console.log("rows: ", rows[0]);
-        res.json(rows[0]);
-    } catch (err) {
-        console.log("err with db.getUser (other user): ", err);
-        res.json({ error: true });
+    if (!req.params.name) {
+        try {
+            const { rows } = await db.findRecentUsers();
+            console.log("rows (findRecentUsers): ", rows);
+            res.json(rows);
+        } catch (err) {
+            console.log("err with db.findRecentUsers: ", err);
+            res.json({ error: true });
+        }
+    } else {
+        try {
+            const { rows } = await db.findUser();
+            console.log("rows (findRecentUsers): ", rows);
+            res.json(rows);
+        } catch (err) {
+            console.log("err with db.findUser: ", err);
+            res.json({ error: true });
+        }
     }
 });
 

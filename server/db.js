@@ -57,7 +57,13 @@ module.exports.updateBio = (bio, id) => {
 };
 
 // FIND USERS
-module.exports.findRecentsUsers = () => {
+module.exports.findRecentUsers = () => {
     const myQuery = `SELECT * FROM users ORDER BY id DESC LIMIT 3;`;
     return db.query(myQuery);
+};
+
+module.exports.findUser = (str) => {
+    const myQuery = `SELECT * FROM users WHERE first ILIKE $1 ORDER BY first ASC`;
+    const key = [str + "%"];
+    return db.query(myQuery, key);
 };
