@@ -308,7 +308,7 @@ app.get("/api/find-users/:name", async (req, res) => {
         }
     } else {
         try {
-            const { rows } = await db.findUser();
+            const { rows } = await db.findUser(req.params.name);
             console.log("rows (findRecentUsers): ", rows);
             res.json(rows);
         } catch (err) {

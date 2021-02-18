@@ -6,7 +6,7 @@ import Uploader from "./uploader";
 import Profile from "./profile";
 import { BrowserRouter, Route, Link } from "react-router-dom";
 import OtherProfile from "./other-profile";
-import { SearchUsers } from "./find-people";
+import SearchUsers from "./find-people";
 
 export class App extends Component {
     constructor(props) {
@@ -147,14 +147,7 @@ export class App extends Component {
                         <Route
                             exact
                             path="/users"
-                            render={() => (
-                                <SearchUsers
-                                    id={this.state.id}
-                                    firstName={this.state.first}
-                                    lastName={this.state.last}
-                                    profilePicUrl={this.state.profilePicUrl}
-                                />
-                            )}
+                            render={() => <SearchUsers />}
                         />
 
                         {/*Conditionally render the Uploader: */}

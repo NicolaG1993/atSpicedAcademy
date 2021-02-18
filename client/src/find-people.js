@@ -2,27 +2,31 @@ import { useState, useEffect } from "react";
 import axios from "./axios";
 import { Link } from "react-router-dom";
 
-export function SearchUsers() {
+export default function SearchUsers() {
     // "user" is our state property
     // "setuser" is the function we'll use to update "user"
     const [user, setUser] = useState("");
     const [users, setUsers] = useState([]);
-
-    const handleChange = (e) => {
-        setUser(e.target.value);
-    };
-
     useEffect(() => {
+        console.log("Find People mounted");
         let abort = false;
 
         (async () => {
             try {
+                console.log("user in Find People: ", user);
                 const { data } = await axios.get(`/api/find-users/${user}`);
+                console.log("data in Find People: ", data);
+                setUsers(data);
                 if (!abort) {
+                    console.log("!abort");
+                    const { data } = await axios.get(
+                        `/api/find-users/${users[0]}`
+                    );
                     setUsers(data);
                 }
             } catch (err) {
                 console.log("err with axios: ", err);
+                abort = true;
             }
         })();
         return () => {
@@ -31,6 +35,16 @@ export function SearchUsers() {
         };
     }, [user]);
 
+    if (!users) {
+        console.log("!users");
+        return null;
+        // return (
+        //     <div className="spinner-container">
+        //         <div className="spinner"></div>
+        //     </div>
+        // );
+    }
+
     return (
         <div>
             <h1>USERS</h1>
@@ -38,29 +52,25 @@ export function SearchUsers() {
                 name="user"
                 type="text"
                 placeholder="user to search"
-                onChange={(e) => {
-                    setUser(e.target.value);
-                    handleChange();
-                }}
+                onChange={(e) => setUser(e.target.value)}
                 autoComplete="off"
             />
-            <div>
-                {users.map((elem, index) => {
-                    return (
-                        <div key={index}>
-                            <Link to={`/user/${elem.id}`}>
-                                <img
-                                    src={elem.profile_pic_url}
-                                    alt={`${elem.first} ${elem.last}`}
-                                />
-                                <p>
-                                    {elem.first} {elem.last}
-                                </p>
-                            </Link>
-                        </div>
-                    );
-                })}
-            </div>
+
+            {users.map((user, index) => {
+                return (
+                    <div key={index}>
+                        <Link to={`/user/${user.id}`}>
+                            <img
+                                src={user.profile_pic_url}
+                                alt={`${user.first} ${user.last}`}
+                            />
+                            <p>
+                                {user.first} {user.last}
+                            </p>
+                        </Link>
+                    </div>
+                );
+            })}
         </div>
     );
 }
