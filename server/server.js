@@ -342,8 +342,8 @@ BUG E STEPS NON COMPLETATI:
     1.b)se loggo con dati sbagliati devo avere un messaggio, invece vado a registration
     1.c)se do email non esistente per reset-password voglio un messaggio che dice che non esiste
     1.d) vari messaggi anche per registration
-    2) Potrei cambiare la db.checkUser con db.getUser (avrebbe piu senso visto che la uso anche in reset psw)
-    3) Capire come funzionano sti url.. non mi sono chiari e non vorrei che cambiassero in modo cosí strano
+    2) Potrei cambiare la db.checkUser con db.getUser (avrebbe piu senso visto che la uso anche in reset psw) --> risolto
+    3) Capire come funzionano sti url.. non mi sono chiari e non vorrei che cambiassero in modo cosí strano --> risolto
     4) Cosé binding method?
     5) Cosé export default?
     6) default img non viene caricata in header fuori da route "/" --> risolto
