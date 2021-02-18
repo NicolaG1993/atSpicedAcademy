@@ -297,7 +297,7 @@ app.get("/api/other-profile/:id", async (req, res) => {
 app.get("/api/find-users/:name", async (req, res) => {
     console.log("GET req to route /api/find-users/:name");
 
-    if (!req.params.name) {
+    if (req.params.name === "pageload") {
         try {
             const { rows } = await db.findRecentUsers();
             console.log("rows (findRecentUsers): ", rows);

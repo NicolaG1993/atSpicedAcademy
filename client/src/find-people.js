@@ -14,15 +14,22 @@ export default function SearchUsers() {
         (async () => {
             try {
                 console.log("user in Find People: ", user);
-                const { data } = await axios.get(`/api/find-users/${user}`);
-                console.log("data in Find People: ", data);
-                setUsers(data);
-                if (!abort) {
-                    console.log("!abort");
-                    // const { data } = await axios.get(
-                    //     `/api/find-users/${users[0]}`
-                    // );
-                    setUsers(data);
+                if (user) {
+                    const { data } = await axios.get(`/api/find-users/${user}`);
+                    console.log("data in Find People: ", data);
+                    if (!abort) {
+                        console.log("!abort");
+                        setUsers(data);
+                    }
+                } else {
+                    const { data } = await axios.get(
+                        `/api/find-users/pageload`
+                    );
+                    console.log("data in Find People: ", data);
+                    if (!abort) {
+                        console.log("!abort");
+                        setUsers(data);
+                    }
                 }
             } catch (err) {
                 console.log("err with axios: ", err);
@@ -34,16 +41,6 @@ export default function SearchUsers() {
             abort = true;
         };
     }, [user]);
-
-    if (!users) {
-        console.log("!users");
-        return null;
-        // return (
-        //     <div className="spinner-container">
-        //         <div className="spinner"></div>
-        //     </div>
-        // );
-    }
 
     return (
         <div>
@@ -61,8 +58,9 @@ export default function SearchUsers() {
                     <div key={index}>
                         <Link to={`/user/${user.id}`}>
                             <img
-                                src={user.profile_pic_url}
+                                src={user.profile_pic_url || "/default.jpg"}
                                 alt={`${user.first} ${user.last}`}
+                                size="medium"
                             />
                             <p>
                                 {user.first} {user.last}
