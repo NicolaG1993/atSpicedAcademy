@@ -318,6 +318,82 @@ app.get("/api/find-users/:name", async (req, res) => {
     }
 });
 
+/////*****FRIENDSHIP*****/////
+app.get("/api/friendship/:id", async (req, res) => {
+    console.log("GET req to route /api/friendship/:id");
+
+    let userId = req.session.userId;
+    let profileId = req.params.id;
+
+    console.log("userId: ", userId, " - profileId: ", profileId);
+
+    try {
+        const { rows } = await db.friendStatus(userId, profileId);
+        console.log("rows (friendStatus): ", rows);
+
+        if (!rows.length) {
+            res.json({ buttonText: "Send friendship request" });
+        } else if (rows[0].accepted) {
+            res.json({ buttonText: "End friendship" });
+        } else if (!rows[0].accepted) {
+            if (rows[0].sender_id == userId) {
+                res.json({ buttonText: "Cancel friend request" });
+            } else {
+                res.json({ buttonText: "Accept friend request" });
+            }
+        }
+
+        // if () {}
+        //empty array = no amicizia = make friend request button
+        //accepted: false = cancel friend request or the accept friend request button
+        //accepted: true = end friendship
+    } catch (err) {
+        console.log("err with db.friendStatus: ", err);
+        res.json({ error: true });
+    }
+});
+
+app.post("/api/friendship/:id", async (req, res) => {
+    console.log("POST req to route /api/friendship/:id");
+    let userId = req.session.userId;
+    let profileId = req.params.id;
+    let status = req.body.buttonText;
+
+    if (status == "Send friendship request") {
+        try {
+            const result = await db.requestFriendship(userId, profileId);
+            res.json({ buttonText: "Cancel friend request" });
+        } catch (err) {
+            console.log("err with db.requestFriendship: ", err);
+            res.json({ error: true }); //mi serve qua?
+        }
+    } else if (status == "Cancel friend request") {
+        try {
+            const result = await db.deleteFriendshipRequest(userId, profileId);
+            res.json({ buttonText: "Send friendship request" });
+        } catch (err) {
+            console.log("err with db.deleteFriendshipRequest: ", err);
+            res.json({ error: true });
+        }
+    } else if (status == "Accept friend request") {
+        try {
+            const result = await db.acceptFriendship(userId, profileId);
+            res.json({ buttonText: "End friendship" });
+        } catch (err) {
+            console.log("err with db.acceptFriendship: ", err);
+            res.json({ error: true });
+        }
+    } else if (status == "End friendship") {
+        try {
+            const result = await db.deleteFriendshipRequest(userId, profileId);
+            res.json({ buttonText: "Send friendship request" });
+        } catch (err) {
+            console.log("err with db.deleteFriendshipRequest: ", err);
+            res.json({ error: true });
+        }
+    }
+});
+
 /////*****MORE*****/////
 app.get("/logout", requireLoggedInUser, (req, res) => {
     req.session = null;
@@ -336,7 +412,7 @@ app.listen(process.env.PORT || 3001, () => {
 
 /*
 BUG E STEPS NON COMPLETATI:
-    0) Client ci mette almeno 20sec per partire
+    0) Client ci mette almeno 20sec per partire --> risolto
     1) Ritornare vari errori per auth
     1.a)se email é gia in db non dare cookie in registration e non entrare nel sito
     1.b)se loggo con dati sbagliati devo avere un messaggio, invece vado a registration
@@ -345,6 +421,7 @@ BUG E STEPS NON COMPLETATI:
     2) Potrei cambiare la db.checkUser con db.getUser (avrebbe piu senso visto che la uso anche in reset psw) --> risolto
     3) Capire come funzionano sti url.. non mi sono chiari e non vorrei che cambiassero in modo cosí strano --> risolto
     4) Cosé binding method?
-    5) Cosé export default?
+    5) Cosé export default? --> risolto
     6) default img non viene caricata in header fuori da route "/" --> risolto
+    7) in molte parti "res.json({ error: true });" non sono sicuro serva veramente
 */

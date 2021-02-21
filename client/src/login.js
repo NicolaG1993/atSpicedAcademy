@@ -56,7 +56,7 @@ export default class Login extends React.Component {
                     onChange={(e) => this.handleChange(e)}
                     name="email"
                     type="text"
-                    placeholder="email"
+                    placeholder="adobo0@example.com"
                 />
                 <input
                     onChange={(e) => this.handleChange(e)}

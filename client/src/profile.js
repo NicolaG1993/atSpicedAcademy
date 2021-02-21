@@ -5,7 +5,7 @@ export default function Profile(props) {
     console.log("Profile.js props", props);
     return (
         <div className="turquoise-frame">
-            <h1>I am the profile component</h1>
+            <h1>I am the profile</h1>
             <ProfilePic profilePicUrl={props.profilePicUrl} size="medium" />
             <h2>
                 {props.firstName} {props.lastName}

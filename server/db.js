@@ -67,3 +67,38 @@ module.exports.findUser = (str) => {
     const key = [str + "%"];
     return db.query(myQuery, key);
 };
+
+// FRIENDSHIPS
+module.exports.friendStatus = (userId, id) => {
+    const myQuery = `SELECT * FROM friendships
+    WHERE (recipient_id = $1 AND sender_id = $2)
+    OR (recipient_id = $2 AND sender_id = $1)`;
+    const keys = [userId, id];
+    return db.query(myQuery, keys);
+};
+
+module.exports.requestFriendship = (userId, id) => {
+    const myQuery = `INSERT INTO friendships (sender_id, recipient_id) VALUES ($1, $2)`;
+    const keys = [userId, id];
+    return db.query(myQuery, keys);
+};
+module.exports.deleteFriendshipRequest = (userId, id) => {
+    const myQuery = `DELETE FROM friendships
+    WHERE (recipient_id = $1 AND sender_id = $2)
+    OR (recipient_id = $2 AND sender_id = $1)`;
+    const keys = [userId, id];
+    return db.query(myQuery, keys);
+};
+module.exports.acceptFriendship = (userId, id) => {
+    const myQuery = `UPDATE friendships
+    SET accepted = true
+    WHERE (recipient_id = $1 AND sender_id = $2)
+    OR (recipient_id = $2 AND sender_id = $1)`;
+    const keys = [userId, id];
+    return db.query(myQuery, keys);
+};
+// module.exports.declineFriendship = (userId, id) => {
+//     const myQuery = ``;
+//     const keys = [userId, id];
+//     return db.query(myQuery, keys);
+// };
