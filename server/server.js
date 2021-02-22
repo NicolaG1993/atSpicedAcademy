@@ -394,6 +394,18 @@ app.post("/api/friendship/:id", async (req, res) => {
     }
 });
 
+/////*****FRIENDS LIST*****/////
+app.get("/get-friends", async (req, res) => {
+    try {
+        const { rows } = await db.friendsList(req.session.userId);
+        console.log("rows (friendsList): ", rows);
+        res.json({ rows });
+    } catch (err) {
+        console.log("err with db.friendsList: ", err);
+        res.json({ error: true });
+    }
+});
+
 /////*****MORE*****/////
 app.get("/logout", requireLoggedInUser, (req, res) => {
     req.session = null;

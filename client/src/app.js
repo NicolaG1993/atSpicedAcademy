@@ -7,6 +7,7 @@ import Profile from "./profile";
 import { BrowserRouter, Route, Link } from "react-router-dom";
 import OtherProfile from "./other-profile";
 import SearchUsers from "./find-people";
+import Friends from "./friends-list";
 
 export class App extends Component {
     constructor(props) {
@@ -149,6 +150,8 @@ export class App extends Component {
                             path="/users"
                             render={() => <SearchUsers />}
                         />
+
+                        <Route path="/friends" render={() => <Friends />} />
 
                         {/*Conditionally render the Uploader: */}
                         {this.state.uploaderVisible && (
