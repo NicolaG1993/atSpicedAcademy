@@ -100,9 +100,11 @@ export class App extends Component {
         }
         return (
             <BrowserRouter>
-                <div className={"app red-frame"}>
+                <div className={"app"}>
                     <div className={"header"}>
-                        <Logo />
+                        <Link to={"/"}>
+                            <Logo />
+                        </Link>
                         <ProfilePic
                             // Passing down props:
                             firstName={this.state.first}
@@ -112,10 +114,12 @@ export class App extends Component {
                             toggleUploader={this.toggleUploader}
                             size="small"
                         />
-                        <Link to={`/users`}>Search</Link>
-                        <Link to={`/friends`}>Friends</Link>
-                        <Link to={`/`}>Profile</Link>
-                        <a href="/logout">Logout</a>
+                        <nav>
+                            <Link to={`/users`}>Search</Link>
+                            <Link to={`/friends`}>Friends</Link>
+                            <Link to={`/`}>Profile</Link>
+                            <a href="/logout">Logout</a>
+                        </nav>
                     </div>
 
                     <div className={"main green-frame"}>
@@ -152,6 +156,7 @@ export class App extends Component {
                                     match={props.match}
                                     history={props.history}
                                     userId={this.state.id}
+                                    size="medium"
                                 />
                             )}
                         />

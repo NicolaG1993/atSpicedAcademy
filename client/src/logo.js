@@ -1,7 +1,7 @@
 export function Logo() {
     return (
-        <div>
-            <h1>Logo</h1>
+        <div className="logo">
+            {/* <h1>Logo</h1> */}
             <img src="/logo.png" alt="logo" />
         </div>
     );

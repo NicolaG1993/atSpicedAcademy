@@ -58,9 +58,9 @@ export default function SearchUsers() {
                     <div key={index}>
                         <Link to={`/user/${user.id}`}>
                             <img
+                                className="findusers"
                                 src={user.profile_pic_url || "/default.jpg"}
                                 alt={`${user.first} ${user.last}`}
-                                size="medium"
                             />
                             <p>
                                 {user.first} {user.last}

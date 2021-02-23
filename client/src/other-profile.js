@@ -60,8 +60,8 @@ export default class OtherProfile extends Component {
                 <h1>Other Profile Component</h1>
                 <img
                     src={this.state.profilePicUrl || "/default.jpg"}
-                    size="medium"
                     alt={`${this.state.first} ${this.state.last}`}
+                    className={`${this.props.size} blue-frame`}
                 />
                 <h2>
                     {this.state.first} {this.state.last}
