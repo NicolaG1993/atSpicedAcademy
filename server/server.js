@@ -362,7 +362,10 @@ app.post("/api/friendship/:id", async (req, res) => {
     if (status == "Send friendship request") {
         try {
             const result = await db.requestFriendship(userId, profileId);
-            res.json({ buttonText: "Cancel friend request" });
+            res.json({
+                buttonText: "Cancel friend request",
+                profileId: result.recipient_id,
+            });
         } catch (err) {
             console.log("err with db.requestFriendship: ", err);
             res.json({ error: true }); //mi serve qua?
@@ -370,7 +373,10 @@ app.post("/api/friendship/:id", async (req, res) => {
     } else if (status == "Cancel friend request") {
         try {
             const result = await db.deleteFriendshipRequest(userId, profileId);
-            res.json({ buttonText: "Send friendship request" });
+            res.json({
+                buttonText: "Send friendship request",
+                profileId: result.recipient_id,
+            });
         } catch (err) {
             console.log("err with db.deleteFriendshipRequest: ", err);
             res.json({ error: true });
@@ -378,7 +384,10 @@ app.post("/api/friendship/:id", async (req, res) => {
     } else if (status == "Accept friend request") {
         try {
             const result = await db.acceptFriendship(userId, profileId);
-            res.json({ buttonText: "End friendship" });
+            res.json({
+                buttonText: "End friendship",
+                profileId: result.recipient_id,
+            });
         } catch (err) {
             console.log("err with db.acceptFriendship: ", err);
             res.json({ error: true });
@@ -386,7 +395,10 @@ app.post("/api/friendship/:id", async (req, res) => {
     } else if (status == "End friendship") {
         try {
             const result = await db.deleteFriendshipRequest(userId, profileId);
-            res.json({ buttonText: "Send friendship request" });
+            res.json({
+                buttonText: "Send friendship request",
+                profileId: result.recipient_id,
+            });
         } catch (err) {
             console.log("err with db.deleteFriendshipRequest: ", err);
             res.json({ error: true });
@@ -395,7 +407,7 @@ app.post("/api/friendship/:id", async (req, res) => {
 });
 
 /////*****FRIENDS LIST*****/////
-app.get("/get-friends", async (req, res) => {
+app.get("/api/get-friends", async (req, res) => {
     try {
         const { rows } = await db.friendsList(req.session.userId);
         console.log("rows (friendsList): ", rows);
@@ -409,7 +421,7 @@ app.get("/get-friends", async (req, res) => {
 /////*****MORE*****/////
 app.get("/logout", requireLoggedInUser, (req, res) => {
     req.session = null;
-    res.redirect("/welcome");
+    res.redirect("/"); //welcome ?
 });
 
 app.get("*", requireLoggedInUser, (req, res) => {
@@ -436,4 +448,9 @@ BUG E STEPS NON COMPLETATI:
     5) Cosé export default? --> risolto
     6) default img non viene caricata in header fuori da route "/" --> risolto
     7) in molte parti "res.json({ error: true });" non sono sicuro serva veramente
+    8) a cosa serve la cartella hooks?
+    9) aggiungere home prima di profile?
+    10) tests
+    11) buttons per frindships non si aggiornano senza refresh (normale?)
+    12) logout broken?
 */

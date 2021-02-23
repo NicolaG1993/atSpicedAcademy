@@ -132,6 +132,15 @@ export class App extends Component {
                                 />
                             )}
                         />
+                        {/*Conditionally render the Uploader: */}
+                        {this.state.uploaderVisible && (
+                            <Uploader
+                                // Passing down methods with arrow function (no binding needed):
+                                setProfilePicUrl={(profilePicUrl) =>
+                                    this.setProfilePicUrl(profilePicUrl)
+                                }
+                            />
+                        )}
 
                         <Route
                             path="/user/:id"
@@ -152,16 +161,6 @@ export class App extends Component {
                         />
 
                         <Route path="/friends" render={() => <Friends />} />
-
-                        {/*Conditionally render the Uploader: */}
-                        {this.state.uploaderVisible && (
-                            <Uploader
-                                // Passing down methods with arrow function (no binding needed):
-                                setProfilePicUrl={(profilePicUrl) =>
-                                    this.setProfilePicUrl(profilePicUrl)
-                                }
-                            />
-                        )}
                     </div>
                 </div>
             </BrowserRouter>
