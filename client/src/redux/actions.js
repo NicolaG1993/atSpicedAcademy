@@ -12,6 +12,7 @@ export async function getFriends() {
         console.log("err in getFriends(actions): ", err);
     }
 }
+//per quale motivo io devo usare data.rows invece di data???
 
 export async function acceptFriendship(userId) {
     try {

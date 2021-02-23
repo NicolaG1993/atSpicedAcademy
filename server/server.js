@@ -421,7 +421,7 @@ app.get("/api/get-friends", async (req, res) => {
 /////*****MORE*****/////
 app.get("/logout", requireLoggedInUser, (req, res) => {
     req.session = null;
-    res.redirect("/"); //welcome ?
+    res.redirect("/welcome"); //welcome ?
 });
 
 app.get("*", requireLoggedInUser, (req, res) => {
@@ -436,21 +436,24 @@ app.listen(process.env.PORT || 3001, () => {
 
 /*
 BUG E STEPS NON COMPLETATI:
-    0) Client ci mette almeno 20sec per partire --> risolto
-    1) Ritornare vari errori per auth
-    1.a)se email é gia in db non dare cookie in registration e non entrare nel sito
-    1.b)se loggo con dati sbagliati devo avere un messaggio, invece vado a registration
+    0) Client ci mette almeno 20sec per partire 🧜‍♂️
+    1) Ritornare vari errori per auth 👩‍🚒
+    1.a)se email é gia in db non dare cookie in registration e non entrare nel sito 🧜‍♂️
+    1.b)se loggo con dati sbagliati devo avere un messaggio, invece vado a registration 👩‍🚒
     1.c)se do email non esistente per reset-password voglio un messaggio che dice che non esiste
     1.d) vari messaggi anche per registration
-    2) Potrei cambiare la db.checkUser con db.getUser (avrebbe piu senso visto che la uso anche in reset psw) --> risolto
-    3) Capire come funzionano sti url.. non mi sono chiari e non vorrei che cambiassero in modo cosí strano --> risolto
+    1.e) in molte parti "res.json({ error: true });" non sono sicuro serva veramente 👩‍🚒
+    2) Potrei cambiare la db.checkUser con db.getUser (avrebbe piu senso visto che la uso anche in reset psw) 🧜‍♂️
+    3) Capire come funzionano sti url.. non mi sono chiari e non vorrei che cambiassero in modo cosí strano 🧜‍♂️
     4) Cosé binding method?
-    5) Cosé export default? --> risolto
-    6) default img non viene caricata in header fuori da route "/" --> risolto
-    7) in molte parti "res.json({ error: true });" non sono sicuro serva veramente
-    8) a cosa serve la cartella hooks?
-    9) aggiungere home prima di profile?
-    10) tests
-    11) buttons per frindships non si aggiornano senza refresh (normale?)
-    12) logout broken?
+    5) Cosé export default? 🧜‍♂️
+    6) default img non viene caricata in header fuori da route "/" 🧜‍♂️
+    7) a cosa serve la cartella hooks? 👩‍🚒
+    8) aggiungere home prima di profile?
+    9) tests 👩‍🚒
+    10) buttons per frindships non si aggiornano senza refresh (normale?) 👩‍🚒
+    11) logout broken? 🧜‍♂️
+    11.a) ho risolto usando <a> invece di <Link> in app.js, corretto?
+    12) useSelector non funziona in Friends component
+    13) voglio usare i vari submit premendo il tasto invio
 */

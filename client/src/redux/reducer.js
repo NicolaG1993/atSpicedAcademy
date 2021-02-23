@@ -21,6 +21,7 @@ export function reducer(state = {}, action) {
                 }
             }),
         };
+        console.log("state in accept friends(reducer): ", state);
     }
 
     if (action.type === "UNFRIEND") {
@@ -30,6 +31,7 @@ export function reducer(state = {}, action) {
                 (elem) => elem.id !== action.profileId
             ),
         };
+        console.log("state in unfriend(reducer): ", state);
     }
 
     return state;

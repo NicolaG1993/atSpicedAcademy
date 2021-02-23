@@ -113,7 +113,9 @@ export class App extends Component {
                             size="small"
                         />
                         <Link to={`/users`}>Search</Link>
-                        <Link to={`/logout`}>Logout</Link>
+                        <Link to={`/friends`}>Friends</Link>
+                        <Link to={`/`}>Profile</Link>
+                        <a href="/logout">Logout</a>
                     </div>
 
                     <div className={"main green-frame"}>
