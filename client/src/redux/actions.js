@@ -62,7 +62,7 @@ export async function chatMessage(msg) {
     try {
         console.log("msg in chatMessage(actions): ", msg);
         return {
-            type: "GET_MSG",
+            type: "POST_MSG",
             payload: msg,
         };
     } catch (err) {

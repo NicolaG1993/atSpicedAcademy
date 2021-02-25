@@ -53,12 +53,13 @@ export default function Friends() {
     //eliminare questo if oppure friends.length
 
     return (
-        <div>
+        <div className="friends">
             <h2>My Friends</h2>
             {friends.map((elem, index) => {
                 return (
-                    <div key={index}>
+                    <div className="userCard" key={index}>
                         <img
+                            className="findusers"
                             src={elem.profile_pic_url || "/default.jpg"}
                             alt={`${elem.first} ${elem.last}`}
                         />
@@ -78,8 +79,9 @@ export default function Friends() {
             <h2>Friends wannabe</h2>
             {wannabes.map((elem, index) => {
                 return (
-                    <div key={index}>
+                    <div className="userCard" key={index}>
                         <img
+                            className="findusers"
                             src={elem.profile_pic_url || "/default.jpg"}
                             alt={`${elem.first} ${elem.last}`}
                         />

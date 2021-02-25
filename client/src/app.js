@@ -112,7 +112,7 @@ export class App extends Component {
                             lastName={this.state.last}
                             profilePicUrl={this.state.profilePicUrl}
                             // Passing down methods as standard functions (binding needed):
-                            toggleUploader={this.toggleUploader}
+                            // toggleUploader={this.toggleUploader}
                             size="small"
                         />
                         <nav>
@@ -137,6 +137,7 @@ export class App extends Component {
                                     profilePicUrl={this.state.profilePicUrl}
                                     bio={this.state.bio}
                                     setBio={this.setBio}
+                                    toggleUploader={this.toggleUploader}
                                 />
                             )}
                         />

@@ -17,7 +17,11 @@ a {
 
 a:hover {
     font-weight: bold;
-    color: goldenrod;
+    /* color: goldenrod; */
+}
+
+.invertedLink {
+    color: rgb(9, 11, 20);
 }
 
 input,
@@ -50,6 +54,7 @@ h1 {
 nav {
     clear: both;
     text-align: end;
+    /* background-color: rgb(56, 56, 56); */
 }
 nav > a {
     margin-left: 5px;
@@ -117,8 +122,8 @@ nav > a {
     border: 2px solid green;
 }
 
-.blue-frame {
-    border: 2px solid blue;
+.white-frame {
+    border: 2px solid ghostwhite;
 }
 
 .turquoise-frame {

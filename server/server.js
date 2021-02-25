@@ -461,15 +461,32 @@ io.on("connection", async (socket) => {
         return socket.disconnect(true);
     }
 
-    socket.on("thanks", function (data) {
+    try {
+        const { rows } = await db.getMessages();
+        socket.emit("getMessages", rows.reverse());
+    } catch (err) {
+        console.log("error in getMessages: ", err);
+    }
+
+    socket.on("postMessage", async (data) => {
         console.log(data);
+        try {
+            await db.postMessages(userId, data);
+            const { rows } = await db.getMessages();
+            io.emit("getMessages", rows.reverse());
+        } catch (err) {
+            console.log("error in postMessages: ", err);
+        }
     });
+    // socket.on("thanks", function (data) {
+    //     console.log(data);
+    // });
 
-    socket.emit("welcome", {
-        message: "Welome. It is nice to see you",
-    });
+    // socket.emit("welcome", {
+    //     message: "Welome. It is nice to see you",
+    // });
 
-    socket.on("disconnect", function () {
+    socket.on("disconnect", () => {
         console.log(`socket with the id ${socket.id} is now disconnected`);
     });
 });
@@ -499,14 +516,14 @@ BUG E STEPS NON COMPLETATI:
 */
 
 /*
-server.js 👩‍🚒
+server.js 🧜‍♂️?
 db.js 🧜‍♂️
 
 start.js 🧜‍♂️
-socket.js 👩‍🚒
-app.js 👩‍🚒
+socket.js 🧜‍♂️?
+app.js 🧜‍♂️
 
-chat.js 👩‍🚒
+chat.js 🧜‍♂️?
 actions.js 🧜‍♂️
 reducers.js 🧜‍♂️
 */

@@ -62,7 +62,7 @@ export default function SearchUsers() {
                                 src={user.profile_pic_url || "/default.jpg"}
                                 alt={`${user.first} ${user.last}`}
                             />
-                            <p>
+                            <p className="invertedLink">
                                 {user.first} {user.last}
                             </p>
                         </Link>

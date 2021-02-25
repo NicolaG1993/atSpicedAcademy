@@ -8,7 +8,11 @@ export default function Profile(props) {
             <h1>
                 {props.firstName} {props.lastName}
             </h1>
-            <ProfilePic profilePicUrl={props.profilePicUrl} size="medium" />
+            <ProfilePic
+                toggleUploader={props.toggleUploader}
+                profilePicUrl={props.profilePicUrl}
+                size="medium"
+            />
             <BioEditor bio={props.bio} setBio={props.setBio} />
         </div>
     );

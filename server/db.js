@@ -124,3 +124,9 @@ module.exports.getMessages = () => {
     LIMIT 10`;
     return db.query(myQuery);
 };
+
+module.exports.postMessage = (id, text) => {
+    const myQuery = `INSERT INTO messages (user_id, message) VALUES ($1, $2)`;
+    const keys = [id, text];
+    return db.query(myQuery, keys);
+};
