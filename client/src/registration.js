@@ -81,31 +81,36 @@ export default class Registration extends React.Component {
                 <h1>Registration</h1>
                 <Link to="/login">Click here to Log in!</Link>
                 {/* strategy #2 for binding: arrow functions! */}
+                <br />
                 <input
                     onChange={(e) => this.handleChange(e)}
                     name="first"
                     type="text"
                     placeholder="first"
                 />
+                <br />
                 <input
                     onChange={(e) => this.handleChange(e)}
                     name="last"
                     type="text"
                     placeholder="last"
                 />
+                <br />
                 <input
                     onChange={(e) => this.handleChange(e)}
                     name="email"
                     type="text"
                     placeholder="email"
                 />
+                <br />
                 <input
                     onChange={(e) => this.handleChange(e)}
                     name="password"
                     type="password"
                     placeholder="password"
                 />
-                <button onClick={() => this.handleClick()}>submit</button>
+                <br />
+                <button onClick={() => this.handleClick()}>Submit</button>
             </div>
         );
     }

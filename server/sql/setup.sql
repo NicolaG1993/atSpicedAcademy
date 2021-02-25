@@ -1,6 +1,6 @@
-DROP TABLE IF EXISTS users;
-DROP TABLE IF EXISTS reset_codes;
-DROP TABLE IF EXISTS friendships;
+-- DROP TABLE IF EXISTS users;
+-- DROP TABLE IF EXISTS reset_codes;
+-- DROP TABLE IF EXISTS friendships;
 
 CREATE TABLE users(
     id SERIAL PRIMARY KEY,
@@ -21,10 +21,17 @@ CREATE TABLE reset_codes(
 );
 
 CREATE TABLE friendships(
-id SERIAL PRIMARY KEY,
-sender_id INT REFERENCES users(id) NOT NULL,
-recipient_id INT REFERENCES users(id) NOT NULL,
-accepted BOOLEAN DEFAULT false
+    id SERIAL PRIMARY KEY,
+    sender_id INT REFERENCES users(id) NOT NULL,
+    recipient_id INT REFERENCES users(id) NOT NULL,
+    accepted BOOLEAN DEFAULT false
+);
+
+CREATE TABLE messages(
+    id SERIAL PRIMARY KEY,
+    user_id INT REFERENCES users(id) NOT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    message VARCHAR(255) NOT NULL CHECK (message != '')
 );
 
 -- psql -d socialnetwork -f server/sql/setup.sql

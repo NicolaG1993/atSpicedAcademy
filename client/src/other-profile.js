@@ -57,15 +57,15 @@ export default class OtherProfile extends Component {
         }
         return (
             <div className="otherProfile">
-                <h1>Other Profile Component</h1>
+                <h1>
+                    {this.state.first} {this.state.last}
+                </h1>
                 <img
                     src={this.state.profilePicUrl || "/default.jpg"}
                     alt={`${this.state.first} ${this.state.last}`}
                     className={`${this.props.size} blue-frame`}
                 />
-                <h2>
-                    {this.state.first} {this.state.last}
-                </h2>
+                <h2>Bio:</h2>
                 <p>{this.state.bio}</p>
                 <FriendshipButton profileId={this.state.id} />
             </div>

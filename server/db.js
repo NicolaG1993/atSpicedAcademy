@@ -114,3 +114,13 @@ module.exports.friendsList = (id) => {
     const key = [id];
     return db.query(myQuery, key);
 };
+
+// CHAT
+module.exports.getMessages = () => {
+    const myQuery = `SELECT * FROM messages
+    JOIN users
+    ON user_id = users.id
+    ORDER BY created_at DESC
+    LIMIT 10`;
+    return db.query(myQuery);
+};

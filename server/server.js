@@ -1,7 +1,5 @@
 const express = require("express");
 const app = express();
-const compression = require("compression");
-const path = require("path");
 
 const cookieSession = require("cookie-session");
 let cookie_sec;
@@ -10,6 +8,20 @@ if (process.env.secretCookie) {
 } else {
     cookie_sec = require("./secrets.json").secretCookie;
 }
+
+const cookieSessionMiddleware = cookieSession({
+    secret: cookie_sec,
+    maxAge: 1000 * 60 * 60 * 24 * 14,
+});
+
+const server = require("http").Server(app);
+const io = require("socket.io")(server, {
+    allowRequest: (req, callback) =>
+        callback(null, req.headers.referer.startsWith("http://localhost:3000")),
+});
+
+const compression = require("compression");
+const path = require("path");
 
 const {
     requireLoggedInUser,
@@ -31,12 +43,17 @@ app.use(compression());
 
 app.use(express.static(path.join(__dirname, "..", "client", "public")));
 
-app.use(
-    cookieSession({
-        secret: cookie_sec,
-        maxAge: 1000 * 60 * 60 * 24 * 14,
-    })
-);
+// app.use(
+//     cookieSession({
+//         secret: cookie_sec,
+//         maxAge: 1000 * 60 * 60 * 24 * 14,
+//     })
+// );
+//lo elimino per pt10 -> cookieSessionMiddleware
+app.use(cookieSessionMiddleware);
+io.use(function (socket, next) {
+    cookieSessionMiddleware(socket.request, socket.request.res, next);
+});
 
 app.use(csurf());
 
@@ -411,7 +428,7 @@ app.get("/api/get-friends", async (req, res) => {
     try {
         const { rows } = await db.friendsList(req.session.userId);
         console.log("rows (friendsList): ", rows);
-        res.json({ rows });
+        res.json(rows);
     } catch (err) {
         console.log("err with db.friendsList: ", err);
         res.json({ error: true });
@@ -432,6 +449,29 @@ app.get("*", requireLoggedInUser, (req, res) => {
 
 app.listen(process.env.PORT || 3001, () => {
     console.log("I'm listening.");
+});
+
+/////*****SOCKET.IO*****/////
+io.on("connection", async (socket) => {
+    console.log(`Socket with id: ${socket.id} has connected!`);
+    console.log(socket.request.session);
+    const userId = socket.request.session.userId;
+    if (!userId) {
+        console.log("disconnect");
+        return socket.disconnect(true);
+    }
+
+    socket.on("thanks", function (data) {
+        console.log(data);
+    });
+
+    socket.emit("welcome", {
+        message: "Welome. It is nice to see you",
+    });
+
+    socket.on("disconnect", function () {
+        console.log(`socket with the id ${socket.id} is now disconnected`);
+    });
 });
 
 /*
@@ -456,4 +496,17 @@ BUG E STEPS NON COMPLETATI:
     11.a) ho risolto usando <a> invece di <Link> in app.js, corretto?
     12) useSelector non funziona in Friends component
     13) voglio usare i vari submit premendo il tasto invio
+*/
+
+/*
+server.js 👩‍🚒
+db.js 🧜‍♂️
+
+start.js 🧜‍♂️
+socket.js 👩‍🚒
+app.js 👩‍🚒
+
+chat.js 👩‍🚒
+actions.js 🧜‍♂️
+reducers.js 🧜‍♂️
 */

@@ -104,9 +104,7 @@ export default class ResetPassword extends React.Component {
             return (
                 <div>
                     {this.state.error && <p>Something broke :(</p>}
-                    <h1>Reset Password pt1</h1>
-                    <Link to="/">Create an account!</Link>
-                    <Link to="/login">Click here to Log in!</Link>
+                    <h1>Reset Password</h1>
 
                     <input
                         onChange={(e) => this.handleChange(e)}
@@ -114,25 +112,33 @@ export default class ResetPassword extends React.Component {
                         type="text"
                         placeholder="email"
                     />
+                    <br />
                     <button onClick={() => this.handleClick()}>Submit</button>
+                    <br />
+                    <Link to="/">Create an account!</Link>
+                    <br />
+                    <Link to="/login">Click here to Log in!</Link>
                 </div>
             );
         } else if (this.state.renderView === 2) {
             return (
                 <div>
-                    <h1>Reset Password pt2</h1>
+                    <h1>Insert the secret code</h1>
+                    <br />
                     <input
                         onChange={(e) => this.handleChange(e)}
                         name="password"
                         type="password"
                         placeholder="password"
                     />
+                    <br />
                     <input
                         onChange={(e) => this.handleChange(e)}
                         name="code"
                         type="password"
                         placeholder="code"
                     />
+                    <br />
                     <button onClick={() => this.handleClick()}>Update</button>
                 </div>
             );
@@ -149,7 +155,6 @@ export default class ResetPassword extends React.Component {
     render() {
         return (
             <div>
-                <h1>reset password</h1>
                 {this.state.error && <p>error</p>}
                 {/* call the method */}
                 {this.determineWhichViewToRender()}

@@ -2,12 +2,13 @@ export function reducer(state = {}, action) {
     if (action.type === "GET_FRIENDS") {
         state = {
             ...state,
-            friendsList: action.friendsList,
+            friendsList: action.payload,
         };
         console.log("state in get friends(reducer): ", state);
     }
 
     if (action.type === "ACCEPT_FRIEND") {
+        console.log("state in accept friends(reducer): ", state);
         state = {
             ...state,
             friendsList: state.friendsList.map((elem) => {
@@ -21,17 +22,26 @@ export function reducer(state = {}, action) {
                 }
             }),
         };
-        console.log("state in accept friends(reducer): ", state);
     }
 
     if (action.type === "UNFRIEND") {
+        console.log("state in unfriend(reducer): ", state);
         state = {
             ...state,
             friendsList: state.friendsList.filter(
                 (elem) => elem.id !== action.profileId
             ),
         };
-        console.log("state in unfriend(reducer): ", state);
+    }
+
+    if (action.type === "GET_MSGS") {
+        state = { ...state, messages: action.payload };
+        console.log("state in GET_MSGS(reducer): ", state);
+    }
+
+    if (action.type === "GET_MSG") {
+        state = { ...state, message: action.payload };
+        console.log("state in GET_MSG(reducer): ", state);
     }
 
     return state;
@@ -47,4 +57,4 @@ friends -> dispatch -> actions -> server -> reducer -> friends
 // map e filter servono clonarlo e tirare fuori i risultati che ci servono in friends
 
 // GET_LIST or RECEIVE_FRIENDS_WANNABES - clones the global state and adds to it a property called friendsWannabes whose value is the array of friends and wannabes
-//questo in pt9 non l'ho capito
+//questo in pt9 non l'ho capito // forse si invece, é quello che sto giá facendo

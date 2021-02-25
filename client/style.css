@@ -3,15 +3,38 @@
     margin: 0;
 }
 body {
-    background-color: ghostwhite;
-    color: green;
+    background-color: rgb(42, 65, 195);
+    color: ghostwhite;
+    font-family: "Nunito Sans";
 }
 
 /* GENERAL */
+a {
+    color: ghostwhite;
+    text-decoration: none;
+    transition: 0.3s ease;
+}
+
+a:hover {
+    font-weight: bold;
+    color: goldenrod;
+}
+
+input,
+button {
+    width: 250px;
+    padding: 5px;
+    margin: 5px 0;
+    text-align: center;
+}
+
+h1 {
+    margin-bottom: 20px;
+}
 
 /* HEADER */
 .header {
-    background-color: rgb(39, 133, 240);
+    background-color: rgb(42, 65, 195);
     z-index: 20;
     position: fixed;
     width: 100%;
@@ -30,16 +53,28 @@ nav {
 }
 nav > a {
     margin-left: 5px;
+    color: ghostwhite;
+}
+
+/* WELCOME */
+#welcome {
+    padding: 90px 25px 5px 25px;
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    text-align: center;
 }
 
 /* MAIN */
 .main {
-    margin-top: 70px;
+    padding: 80px 25px 5px 25px;
     background-color: rgb(230, 230, 230);
+    min-height: 100vh;
+    /* color: rgb(42, 65, 195); */
+    color: rgb(9, 11, 20);
 }
 
 .main > div {
-    padding: 5px 25px 5px 25px;
 }
 
 /* PROFILE */

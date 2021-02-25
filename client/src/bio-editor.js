@@ -44,7 +44,7 @@ export default class BioEditor extends React.Component {
         if (this.state.editingMode) {
             return (
                 <div className="purple-frame">
-                    <h1>EDIT MODE!!!</h1>
+                    <h2>Editing Bio:</h2>
                     <textarea
                         name="bio"
                         defaultValue={this.props.bio}
@@ -57,7 +57,7 @@ export default class BioEditor extends React.Component {
         }
         return (
             <div className="purple-frame">
-                <h1>I am the Bio Editor!</h1>
+                <h2>Bio:</h2>
                 <p>{this.props.bio}</p>
                 <button onClick={() => this.setState({ editingMode: true })}>
                     Click me!

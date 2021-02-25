@@ -8,6 +8,7 @@ import { BrowserRouter, Route, Link } from "react-router-dom";
 import OtherProfile from "./other-profile";
 import SearchUsers from "./find-people";
 import Friends from "./friends-list";
+import Chat from "./chat";
 
 export class App extends Component {
     constructor(props) {
@@ -117,6 +118,7 @@ export class App extends Component {
                         <nav>
                             <Link to={`/users`}>Search</Link>
                             <Link to={`/friends`}>Friends</Link>
+                            <Link to={`/chat`}>Chat</Link>
                             <Link to={`/`}>Profile</Link>
                             <a href="/logout">Logout</a>
                         </nav>
@@ -168,9 +170,12 @@ export class App extends Component {
                         />
 
                         <Route path="/friends" render={() => <Friends />} />
+
+                        <Route path="/chat" render={() => <Chat />} />
                     </div>
                 </div>
             </BrowserRouter>
         );
     }
 }
+//  exact ?

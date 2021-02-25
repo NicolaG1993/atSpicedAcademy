@@ -49,8 +49,6 @@ export default class Login extends React.Component {
             <div>
                 {this.state.error && <p>Something broke :(</p>}
                 <h1>Login</h1>
-                <Link to="/">Create an account!</Link>
-                <Link to="/reset">Click here if you forgot your password!</Link>
 
                 <input
                     onChange={(e) => this.handleChange(e)}
@@ -58,13 +56,20 @@ export default class Login extends React.Component {
                     type="text"
                     placeholder="adobo0@example.com"
                 />
+                <br />
                 <input
                     onChange={(e) => this.handleChange(e)}
                     name="password"
                     type="password"
                     placeholder="password"
                 />
+                <br />
                 <button onClick={() => this.handleClick()}>Login</button>
+                <br />
+                <Link to="/">Create an account!</Link>
+
+                <br />
+                <Link to="/reset">Click here if you forgot your password!</Link>
             </div>
         );
     }

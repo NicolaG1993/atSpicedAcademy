@@ -8,6 +8,8 @@ import reduxPromise from "redux-promise";
 import { composeWithDevTools } from "redux-devtools-extension";
 import { reducer } from "./redux/reducer";
 
+import { init } from "./socket.js";
+
 // function HelloWorld() {
 //     return <div>Hello, World!</div>;
 // }
@@ -21,11 +23,13 @@ let elem;
 if (location.pathname === "/welcome") {
     elem = <Welcome />;
 } else {
-    elem = (
-        <Provider store={store}>
-            <App />
-        </Provider>
-    );
+    elem =
+        (init(store),
+        (
+            <Provider store={store}>
+                <App />
+            </Provider>
+        ));
 }
 
 //render my function in my DOM?

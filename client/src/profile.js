@@ -4,12 +4,11 @@ import ProfilePic from "./profile-pic";
 export default function Profile(props) {
     console.log("Profile.js props", props);
     return (
-        <div className="turquoise-frame">
-            <h1>I am the profile</h1>
-            <ProfilePic profilePicUrl={props.profilePicUrl} size="medium" />
-            <h2>
+        <div className="profileComp">
+            <h1>
                 {props.firstName} {props.lastName}
-            </h2>
+            </h1>
+            <ProfilePic profilePicUrl={props.profilePicUrl} size="medium" />
             <BioEditor bio={props.bio} setBio={props.setBio} />
         </div>
     );
