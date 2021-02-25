@@ -107,13 +107,19 @@ export default class ResetPassword extends React.Component {
                     <h1>Reset Password</h1>
 
                     <input
+                        className="auth-input"
                         onChange={(e) => this.handleChange(e)}
                         name="email"
                         type="text"
                         placeholder="email"
                     />
                     <br />
-                    <button onClick={() => this.handleClick()}>Submit</button>
+                    <button
+                        className="auth-button"
+                        onClick={() => this.handleClick()}
+                    >
+                        Submit
+                    </button>
                     <br />
                     <Link to="/">Create an account!</Link>
                     <br />
@@ -126,6 +132,7 @@ export default class ResetPassword extends React.Component {
                     <h1>Insert the secret code</h1>
                     <br />
                     <input
+                        className="auth-input"
                         onChange={(e) => this.handleChange(e)}
                         name="password"
                         type="password"
@@ -133,13 +140,19 @@ export default class ResetPassword extends React.Component {
                     />
                     <br />
                     <input
+                        className="auth-input"
                         onChange={(e) => this.handleChange(e)}
                         name="code"
                         type="password"
                         placeholder="code"
                     />
                     <br />
-                    <button onClick={() => this.handleClick()}>Update</button>
+                    <button
+                        className="auth-button"
+                        onClick={() => this.handleClick()}
+                    >
+                        Update
+                    </button>
                 </div>
             );
         } else if (this.state.renderView === 3) {

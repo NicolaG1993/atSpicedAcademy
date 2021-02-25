@@ -52,7 +52,7 @@ export default function FriendshipButton(props) {
 
     return (
         <>
-            <button className="btn" onClick={() => btnRequest()}>
+            <button className="auto" onClick={() => btnRequest()}>
                 {buttonText}
             </button>
         </>

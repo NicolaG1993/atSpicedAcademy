@@ -34,13 +34,11 @@ export default function Chat() {
                 {messages &&
                     messages.map((elem, index) => (
                         <div className="message" key={index}>
-                            <img
-                                src={elem.profile_pic_url || "default.jpg"}
-                                size="small"
-                            />
+                            <img src={elem.profile_pic_url || "default.jpg"} />
                             <p>
                                 {elem.first} {elem.last}:
                             </p>
+                            <p>{elem.created_at}</p>
                             <p>{elem.message}</p>
                         </div>
                     ))}

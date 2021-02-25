@@ -124,7 +124,7 @@ export class App extends Component {
                         </nav>
                     </div>
 
-                    <div className={"main green-frame"}>
+                    <div className={"main"}>
                         {this.state.error && <p>Something broke :(</p>}
                         <Route
                             exact

@@ -51,6 +51,7 @@ export default class Login extends React.Component {
                 <h1>Login</h1>
 
                 <input
+                    className="auth-input"
                     onChange={(e) => this.handleChange(e)}
                     name="email"
                     type="text"
@@ -58,13 +59,19 @@ export default class Login extends React.Component {
                 />
                 <br />
                 <input
+                    className="auth-input"
                     onChange={(e) => this.handleChange(e)}
                     name="password"
                     type="password"
                     placeholder="password"
                 />
                 <br />
-                <button onClick={() => this.handleClick()}>Login</button>
+                <button
+                    className="auth-button"
+                    onClick={() => this.handleClick()}
+                >
+                    Login
+                </button>
                 <br />
                 <Link to="/">Create an account!</Link>
 

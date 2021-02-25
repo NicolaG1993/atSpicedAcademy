@@ -1,6 +1,7 @@
 -- DROP TABLE IF EXISTS users;
 -- DROP TABLE IF EXISTS reset_codes;
 -- DROP TABLE IF EXISTS friendships;
+DROP TABLE IF EXISTS messages;
 
 CREATE TABLE users(
     id SERIAL PRIMARY KEY,

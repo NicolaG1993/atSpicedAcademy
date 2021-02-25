@@ -83,6 +83,7 @@ export default class Registration extends React.Component {
                 {/* strategy #2 for binding: arrow functions! */}
                 <br />
                 <input
+                    className="auth-input"
                     onChange={(e) => this.handleChange(e)}
                     name="first"
                     type="text"
@@ -90,6 +91,7 @@ export default class Registration extends React.Component {
                 />
                 <br />
                 <input
+                    className="auth-input"
                     onChange={(e) => this.handleChange(e)}
                     name="last"
                     type="text"
@@ -97,6 +99,7 @@ export default class Registration extends React.Component {
                 />
                 <br />
                 <input
+                    className="auth-input"
                     onChange={(e) => this.handleChange(e)}
                     name="email"
                     type="text"
@@ -104,13 +107,19 @@ export default class Registration extends React.Component {
                 />
                 <br />
                 <input
+                    className="auth-input"
                     onChange={(e) => this.handleChange(e)}
                     name="password"
                     type="password"
                     placeholder="password"
                 />
                 <br />
-                <button onClick={() => this.handleClick()}>Submit</button>
+                <button
+                    className="auth-button"
+                    onClick={() => this.handleClick()}
+                >
+                    Submit
+                </button>
             </div>
         );
     }
