@@ -12,15 +12,15 @@ export default function Chat() {
 
     useEffect(() => {
         if (messages) {
-            //console.log("messages in useEffect: ", messages);
+            console.log("messages in useEffect: ", messages);
             elemRef.current.scrollTop =
                 elemRef.current.scrollHeight - elemRef.current.clientHeight;
         }
     }, [messages]);
 
     const submitMessage = (e) => {
-        //console.log("messages in submitMessage: ", messages);
-        if (e.key === "Enter") {
+        console.log("e in submitMessage: ", message);
+        if (e.key === "Enter" || e.type === "click") {
             // e.preventDefault(); // ?
             socket.emit("postMessage", message);
             e.target.value = "";

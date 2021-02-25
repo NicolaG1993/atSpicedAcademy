@@ -1,5 +1,7 @@
 const express = require("express");
 const app = express();
+const compression = require("compression");
+const path = require("path");
 
 const cookieSession = require("cookie-session");
 let cookie_sec;
@@ -8,20 +10,6 @@ if (process.env.secretCookie) {
 } else {
     cookie_sec = require("./secrets.json").secretCookie;
 }
-
-const cookieSessionMiddleware = cookieSession({
-    secret: cookie_sec,
-    maxAge: 1000 * 60 * 60 * 24 * 14,
-});
-
-const server = require("http").Server(app);
-const io = require("socket.io")(server, {
-    allowRequest: (req, callback) =>
-        callback(null, req.headers.referer.startsWith("http://localhost:3000")),
-});
-
-const compression = require("compression");
-const path = require("path");
 
 const {
     requireLoggedInUser,
@@ -37,6 +25,16 @@ const cryptoRandomString = require("crypto-random-string");
 
 const { uploader } = require("./upload");
 const s3 = require("./s3");
+
+const server = require("http").Server(app);
+const io = require("socket.io")(server, {
+    allowRequest: (req, callback) =>
+        callback(null, req.headers.referer.startsWith("http://localhost:3000")),
+});
+const cookieSessionMiddleware = cookieSession({
+    secret: cookie_sec,
+    maxAge: 1000 * 60 * 60 * 24 * 14,
+});
 
 /////*****MIDDLEWARES*****/////
 app.use(compression());
@@ -447,7 +445,7 @@ app.get("*", requireLoggedInUser, (req, res) => {
     res.sendFile(path.join(__dirname, "..", "client", "index.html"));
 });
 
-app.listen(process.env.PORT || 3001, () => {
+server.listen(process.env.PORT || 3001, () => {
     console.log("I'm listening.");
 });
 
@@ -471,11 +469,11 @@ io.on("connection", async (socket) => {
     socket.on("postMessage", async (data) => {
         console.log(data);
         try {
-            await db.postMessages(userId, data);
+            await db.postMessage(userId, data);
             const { rows } = await db.getMessages();
             io.emit("getMessages", rows.reverse());
         } catch (err) {
-            console.log("error in postMessages: ", err);
+            console.log("error in postMessage: ", err);
         }
     });
     // socket.on("thanks", function (data) {

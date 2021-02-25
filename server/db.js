@@ -120,7 +120,7 @@ module.exports.getMessages = () => {
     const myQuery = `SELECT * FROM messages
     JOIN users
     ON user_id = users.id
-    ORDER BY created_at DESC
+    ORDER BY messages.created_at DESC
     LIMIT 10`;
     return db.query(myQuery);
 };
